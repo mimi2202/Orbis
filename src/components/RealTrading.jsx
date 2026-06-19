@@ -20,7 +20,6 @@ export default function RealTrading({ isMobile = false }) {
   const [tradeResult, setTradeResult] = useState(null)
   const [riskLimits, setRiskLimits] = useState(DEFAULT_RISK_LIMITS)
   
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
   // Manual trading states
   const [manualDecision, setManualDecision] = useState('BUY')

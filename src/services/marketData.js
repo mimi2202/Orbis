@@ -1,4 +1,5 @@
-// src/services/marketData.js - Calls Backend API (No process.env)
+import { API_URL } from '../utils/api'
+
 let cachedData = null
 let lastFetch = 0
 const CACHE_DURATION = 10000 // 10 seconds
@@ -13,7 +14,7 @@ export async function getRealMarketData() {
 
   try {
     // Call the backend API instead of CMC directly
-    const response = await fetch('http://localhost:5000/api/market-data')
+    const response = await fetch(`${API_URL}/api/market-data`)
     const data = await response.json()
     
     if (data.success && data.marketData) {

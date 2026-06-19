@@ -8,7 +8,7 @@ export default function Marketplace({ isMobile = false, isTablet = false }) {
   const [purchasing, setPurchasing] = useState(null)
   const [purchaseError, setPurchaseError] = useState(null)
   
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+  const API_URL = import.meta.env.VITE_API_URL || '${API_URL}'
 
   const handlePurchase = async (agentType, price) => {
     setPurchasing(agentType)

@@ -23,7 +23,7 @@ const Stats = memo(function Stats({ isMobile = false }) {
 
     const fetchData = async () => {
       try {
-       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+       const API_URL = import.meta.env.VITE_API_URL || '${API_URL}'
 const response = await fetch(`${API_URL}/api/status`)
         const data = await response.json()
         if (data.success) {
