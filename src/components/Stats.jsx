@@ -2,6 +2,7 @@
 import React, { memo, useState, useEffect, useMemo } from 'react'
 import { useApp } from '../context/AppContext'
 import { TrendingUp, Award, Activity, DollarSign, Wallet } from 'lucide-react'
+import { API_URL } from '../utils/api'
 
 const Stats = memo(function Stats({ isMobile = false }) {
   const { walletConnected } = useApp()

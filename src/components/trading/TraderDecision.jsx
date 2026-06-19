@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useApp } from '../../context/AppContext'
 import { Brain, Zap, ArrowRight, Clock, Play, Square } from 'lucide-react'
+import { API_URL } from '../utils/api'
 
 export default function TraderDecision({ isMobile = false }) {
   const { state } = useApp()
@@ -9,8 +10,6 @@ export default function TraderDecision({ isMobile = false }) {
   const [autoStatus, setAutoStatus] = useState('Idle')
   const [realTrade, setRealTrade] = useState(null)
   const trade = state.currentTrade
-
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
   // Check auto-trade status
   useEffect(() => {

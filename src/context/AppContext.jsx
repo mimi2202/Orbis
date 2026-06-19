@@ -6,6 +6,7 @@ import {
   updateReputation,
   purchaseSignal 
 } from '../utils/state'
+import { API_URL } from '../utils/api'
 import { generateSignals, shouldUpdateSignals } from '../utils/agents'
 
 const AppContext = createContext()

@@ -1,6 +1,7 @@
 // src/components/RealTrading.jsx
 import React, { useState, useEffect } from 'react'
 import { useApp } from '../context/AppContext'
+import { API_URL } from '../utils/api'
 import { DollarSign, TrendingUp, TrendingDown, AlertTriangle, Shield, RefreshCw, RotateCcw } from 'lucide-react'
 
 const DEFAULT_RISK_LIMITS = {

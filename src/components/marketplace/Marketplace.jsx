@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useApp } from '../../context/AppContext'
 import { ShoppingCart, Star, Shield } from 'lucide-react'
+import { API_URL } from '../utils/api'
 
 export default function Marketplace({ isMobile = false, isTablet = false }) {
   const { state, dispatch } = useApp()
