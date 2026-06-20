@@ -435,14 +435,14 @@ export default function Marketplace({ isMobile = false, isTablet = false }) {
                   color: '#00D4AA'
                 }}>
                   ✅ {status.message}
-                  {status.txHash && (
-                    <br />
-                   {status.txHash && (
-  <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
-    Tx: {status.txHash.slice(0, 20)}...{status.txHash.slice(-10)}
-  </span>
+                 {status.txHash && (
+  <>
+    <br />
+    <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>
+      Tx: {status.txHash.slice(0, 20)}...{status.txHash.slice(-10)}
+    </span>
+  </>
 )}
-                  )}
                 </div>
               )}
 

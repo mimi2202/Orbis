@@ -29,8 +29,6 @@ const loadState = () => {
         tradeCount: parsed.tradeCount || 0,
         winCount: parsed.winCount || 0,
         walletConnected: parsed.walletConnected || false,
-        walletConnected: false,
-walletAddress: null,
         walletAddress: parsed.walletAddress || null
       }
     }
