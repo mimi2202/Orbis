@@ -1,4 +1,4 @@
-﻿// src/agent/momentumAgent.cjs
+// src/agent/momentumAgent.cjs
 // Syntra Agent v15 - DEMO MODE (fast cycles for judges)
 
 const { execSync } = require('child_process');
