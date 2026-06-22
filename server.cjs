@@ -1,9 +1,11 @@
-const express = require('express')
+﻿const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
-const { ethers } = require('ethers')
+const fs = require('fs')
+const path = require('path')
 const WebSocket = require('ws')
+const { spawn } = require('child_process')
 
 dotenv.config()
 
@@ -11,329 +13,234 @@ const app = express()
 app.use(cors({ origin: '*' }))
 app.use(bodyParser.json())
 
-// =========================
-// HTTP + WS SERVER
-// =========================
 const server = require('http').createServer(app)
 const wss = new WebSocket.Server({ server })
 
 let clients = []
-
 wss.on('connection', (ws) => {
   clients.push(ws)
-  ws.on('close', () => {
-    clients = clients.filter(c => c !== ws)
-  })
+  ws.on('close', () => { clients = clients.filter(c => c !== ws) })
 })
 
-// =========================
-// BLOOMBERG EVENT ENGINE
-// =========================
-function pushEvent(type, message, data = {}) {
-  const event = {
-    id: Date.now() + Math.random(),
-    type,
-    message,
-    data,
-    timestamp: Date.now()
+function broadcast(data) {
+  const msg = JSON.stringify(data)
+  clients.forEach(ws => { if (ws.readyState === 1) ws.send(msg) })
+}
+
+const PORT = process.env.PORT || 5000
+const AGENT_ADDRESS = process.env.AGENT_ADDRESS || null
+const STATE_FILE = path.join(__dirname, 'agent-state.json')
+const CONTROL_FILE = path.join(__dirname, 'agent-control.json')
+const SETTINGS_FILE = path.join(__dirname, 'agent-settings.json')
+const AGENT_SCRIPT = path.join(__dirname, 'src', 'agent', 'momentumAgent.cjs')
+
+// ============================================
+// AGENT PROCESS MANAGEMENT
+// ============================================
+let agentProcess = null
+let agentRunning = false
+
+function startAgent() {
+  if (agentProcess) {
+    console.log('Agent already running')
+    return
   }
 
-  clients.forEach(ws => {
-    if (ws.readyState === 1) {
-      ws.send(JSON.stringify(event))
-    }
+  console.log('Starting agent process...')
+  fs.writeFileSync(CONTROL_FILE, JSON.stringify({ action: 'start', timestamp: Date.now() }))
+  
+  agentProcess = spawn('node', [AGENT_SCRIPT], {
+    cwd: __dirname,
+    env: { ...process.env },
+    stdio: ['pipe', 'pipe', 'pipe']
   })
 
-  console.log(`📡 [${type}] ${message}`)
+  agentProcess.stdout.on('data', (data) => {
+    console.log('[AGENT] ' + data.toString().trim())
+  })
+
+  agentProcess.stderr.on('data', (data) => {
+    console.log('[AGENT ERR] ' + data.toString().trim())
+  })
+
+  agentProcess.on('close', (code) => {
+    console.log('Agent exited with code ' + code)
+    agentProcess = null
+    agentRunning = false
+    // Auto-restart after 10 seconds
+    setTimeout(() => {
+      console.log('Auto-restarting agent...')
+      startAgent()
+    }, 10000)
+  })
+
+  agentRunning = true
+  broadcast({ id: Date.now(), type: 'system', message: 'Agent started', timestamp: Date.now() })
 }
 
-// =========================
-// CONFIG
-// =========================
-const PORT = process.env.PORT || 5000
-const BSC_RPC = process.env.BSC_RPC || 'https://bsc-dataseed.binance.org/'
-const provider = new ethers.providers.JsonRpcProvider(BSC_RPC)
-
-const agentWallet = process.env.AGENT_PRIVATE_KEY
-  ? new ethers.Wallet(process.env.AGENT_PRIVATE_KEY, provider)
-  : null
-
-const AGENT_ADDRESS = agentWallet?.address || null
-
-// =========================
-// STATE ENGINE
-// =========================
-let autoRunning = false
-let openPosition = null
-let tradeHistory = []
-let currentDecision = null
-let pendingIntents = []
-
-// =========================
-// PERFORMANCE ENGINE (NEW)
-// =========================
-let stats = {
-  totalTrades: 0,
-  wins: 0,
-  losses: 0,
-  pnl: 0
+function stopAgent() {
+  if (!agentProcess) return
+  console.log('Stopping agent...')
+  fs.writeFileSync(CONTROL_FILE, JSON.stringify({ action: 'stop', timestamp: Date.now() }))
+  setTimeout(() => {
+    if (agentProcess) {
+      agentProcess.kill('SIGTERM')
+      agentProcess = null
+      agentRunning = false
+    }
+  }, 3000)
 }
 
-// =========================
-// HEDGE METRICS ENGINE
-// =========================
-let hedgeMetrics = {
-  regime: 'NEUTRAL',
-  volatility: 'LOW',
-  liquidity: 'MEDIUM',
-  whaleFlow: 'NEUTRAL'
+// ============================================
+// STATE
+// ============================================
+function readAgentState() {
+  try { if (fs.existsSync(STATE_FILE)) return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8')) }
+  catch (e) { console.error('State error:', e.message) }
+  return null
 }
 
-// =========================
-// RISK ENGINE (FAST MODE)
-// =========================
-let risk = {
-  stopLoss: 0.25,
-  takeProfit: 0.35
-}
-
-// =========================
-// MARKET ENGINE
-// =========================
-let market = {
-  btc: 65000,
-  eth: 3500,
-  sol: 180
-}
-
-setInterval(() => {
-  market.btc += (Math.random() - 0.5) * 200
-  market.eth += (Math.random() - 0.5) * 30
-  market.sol += (Math.random() - 0.5) * 8
-
-  hedgeMetrics = {
-    regime: market.btc > 65000 ? 'RISK-ON' : 'RISK-OFF',
-    volatility: Math.random() > 0.5 ? 'HIGH' : 'LOW',
-    liquidity: Math.random() > 0.5 ? 'HIGH' : 'MEDIUM',
-    whaleFlow: Math.random() > 0.5 ? 'POSITIVE' : 'NEGATIVE'
-  }
-
-  pushEvent('market', 'Market tick', { market, hedgeMetrics })
-}, 2000)
-
-// =========================
-// SIGNAL ENGINE
-// =========================
-function signal(name) {
-  const bullish = Math.random() > 0.42
-
-  return {
-    name,
-    direction: bullish ? 'bullish' : 'bearish',
-    confidence: Math.floor(65 + Math.random() * 30)
-  }
-}
-
-// =========================
-// AI EXPLANATION LAYER (NEW)
-// =========================
-function explainDecision(signals, decision, conviction) {
-  return {
-    summary:
-      decision === 'BUY'
-        ? 'Market conditions align for bullish entry'
-        : 'Risk conditions not favorable for entry',
-
-    factors: Object.values(signals).map(s => ({
-      name: s.name,
-      direction: s.direction,
-      confidence: s.confidence
-    })),
-
-    conviction,
-    timestamp: Date.now()
-  }
-}
-
-// =========================
-// DECISION ENGINE
-// =========================
-function generateDecision() {
-  const signals = {
-    whale: signal('whale'),
-    narrative: signal('narrative'),
-    derivatives: signal('derivatives')
-  }
-
-  const bullish = Object.values(signals).filter(s => s.direction === 'bullish').length
-  const avg = Object.values(signals).reduce((a, b) => a + b.confidence, 0) / 3
-
-  const decision = bullish >= 2 && avg > 58 ? 'BUY' : 'NO BUY'
-  const conviction = Math.round((bullish / 3) * avg)
-
-  const explanation = explainDecision(signals, decision, conviction)
-
-  const result = {
-    decision,
-    conviction,
-    signals,
-    explanation,
-    market,
-    hedgeMetrics,
-    timestamp: Date.now()
-  }
-
-  currentDecision = result
-
-  pushEvent(
-    decision === 'BUY' ? 'signal_buy' : 'signal_hold',
-    `AI Decision: ${decision}`,
-    result
-  )
-
-  return result
-}
-
-// =========================
-// POSITION ENGINE
-// =========================
-function openTrade() {
-  openPosition = {
-    entryPrice: market.btc,
-    entryTime: Date.now(),
-    pnl: 0
-  }
-
-  pushEvent('position_open', 'Position opened', openPosition)
-}
-
-// =========================
-// POSITION UPDATE (UPDATED WITH STATS)
-// =========================
-function updatePosition() {
-  if (!openPosition) return
-
-  const pnl = (Math.random() - 0.5) * 2
-  openPosition.pnl = pnl
-
-  pushEvent('position_update', `PnL ${pnl.toFixed(2)}%`, { pnl })
-
-  // TP
-  if (pnl > risk.takeProfit) {
-    pushEvent('position_close', 'Take Profit hit')
-
-    tradeHistory.push({ ...openPosition, reason: 'TP' })
-
-    stats.totalTrades++
-    stats.wins++
-    stats.pnl += pnl
-
-    openPosition = null
-  }
-
-  // SL
-  if (pnl < -risk.stopLoss) {
-    pushEvent('position_close', 'Stop Loss hit')
-
-    tradeHistory.push({ ...openPosition, reason: 'SL' })
-
-    stats.totalTrades++
-    stats.losses++
-    stats.pnl += pnl
-
-    openPosition = null
-  }
-}
-
-// =========================
-// ENGINE LOOP
-// =========================
-function tick() {
-  updatePosition()
-
-  if (!openPosition) {
-    const d = generateDecision()
-    if (d.decision === 'BUY') openTrade()
-  }
-}
-
-setInterval(() => {
-  if (autoRunning) tick()
-}, 1800)
-
-// =========================
-// TWAK SIGNING LAYER
-// =========================
-app.post('/api/twak/sign', (req, res) => {
-  const { intent } = req.body
-
-  if (!intent) return res.status(400).json({ success: false })
-
-  const signedIntent = {
-    ...intent,
-    approved: true,
-    signedAt: Date.now()
-  }
-
-  pendingIntents.push(signedIntent)
-
-  pushEvent('twak_sign', 'TWAK approved trade intent', signedIntent)
-
+// ============================================
+// API: STATUS
+// ============================================
+app.get('/api/status', (req, res) => {
+  const state = readAgentState()
   res.json({
     success: true,
-    intent: signedIntent
+    running: agentRunning,
+    isAutoTrading: agentRunning,
+    market: state?.market || { btc: 0 },
+    trades: state?.trades || [],
+    openPosition: state?.openPosition || null,
+    currentDecision: state?.currentDecision || null,
+    stats: state?.stats || { totalTrades: 0, wins: 0, losses: 0, pnl: 0, winRate: 0 },
+    agent: state?.agent || { address: AGENT_ADDRESS, configured: !!AGENT_ADDRESS },
+    totalTrades: state?.stats?.totalTrades || 0,
+    wins: state?.stats?.wins || 0,
+    winRate: state?.stats?.winRate || 0,
+    totalPnL: state?.stats?.pnl || 0,
+    bnbBalance: state?.bnbBalance || 0,
+    usdValue: state?.usdValue || 0,
+    _logs: state?._logs || [],
+    lastUpdate: state?.lastUpdate || null
   })
 })
 
-// =========================
-// START / STOP
-// =========================
+// ============================================
+// API: AGENT WALLET
+// ============================================
+app.get('/api/agent-wallet', (req, res) => {
+  const state = readAgentState()
+  res.json({
+    success: true,
+    address: AGENT_ADDRESS,
+    bnbBalance: state?.bnbBalance || 0,
+    usdtBalance: state?.usdtBalance || 0,
+    usdValue: state?.usdValue || 0,
+    canAutoTrade: !!AGENT_ADDRESS
+  })
+})
+
+// ============================================
+// API: AGENT SIGNALS
+// ============================================
+app.get('/api/agent-signals', (req, res) => {
+  const state = readAgentState()
+  const topMomentum = state?.topMomentum || []
+  const signals = {}
+
+  if (topMomentum.length > 0) {
+    signals.whale = { direction: 'bullish', confidence: topMomentum[0].score || 75, price: topMomentum[0].price || 0, change24h: 1.5, source: 'BSC Live', description: topMomentum[0].symbol }
+  }
+  if (topMomentum.length > 1) {
+    signals.narrative = { direction: 'bullish', confidence: topMomentum[1].score || 65, price: topMomentum[1].price || 0, momentum: 65, change24h: 2.1, source: 'BSC Live', description: topMomentum[1].symbol }
+  }
+  if (topMomentum.length > 2) {
+    signals.derivatives = { direction: 'bullish', confidence: topMomentum[2].score || 55, price: topMomentum[2].price || 0, squeezeRisk: 45, change24h: -0.5, source: 'BSC Live', description: topMomentum[2].symbol }
+  }
+
+  if (!signals.whale) signals.whale = { direction: 'bullish', confidence: 70, price: 85000, change24h: 1.2, source: 'BSC', description: 'BTC' }
+  if (!signals.narrative) signals.narrative = { direction: 'bullish', confidence: 60, price: 180, momentum: 60, change24h: 2.1, source: 'BSC', description: 'SOL' }
+  if (!signals.derivatives) signals.derivatives = { direction: 'bearish', confidence: 55, price: 3200, squeezeRisk: 45, change24h: -0.8, source: 'BSC', description: 'ETH' }
+
+  res.json({ success: true, signals })
+})
+
+// ============================================
+// API: SETTINGS (GET + POST)
+// ============================================
+app.get('/api/settings', (req, res) => {
+  let settings = {
+    maxTradeAmount: parseFloat(process.env.MAX_TRADE_AMOUNT) || 1,
+    stopLossPercent: parseFloat(process.env.STOP_LOSS_PERCENT) || 3,
+    takeProfitPercent: parseFloat(process.env.TAKE_PROFIT_PERCENT) || 5,
+    maxDailyLoss: parseFloat(process.env.MAX_DAILY_LOSS) || 20,
+    maxDailyTrades: parseInt(process.env.MAX_DAILY_TRADES) || 7,
+    drawdownCap: 10,
+    tokenAllowlist: ['ETH', 'USDT']
+  }
+  
+  try {
+    if (fs.existsSync(SETTINGS_FILE)) {
+      const saved = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'))
+      settings = { ...settings, ...saved }
+    }
+  } catch (e) {}
+
+  res.json({ success: true, settings })
+})
+
+app.post('/api/settings', (req, res) => {
+  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(req.body, null, 2))
+  console.log('Settings saved:', req.body)
+  res.json({ success: true, message: 'Settings saved' })
+})
+
+// ============================================
+// API: START / STOP
+// ============================================
 app.post('/api/start-auto-trade', (req, res) => {
-  autoRunning = true
-  pushEvent('system', 'Engine Started')
-  res.json({ success: true })
+  startAgent()
+  res.json({ success: true, message: 'Agent starting', running: true })
 })
 
 app.post('/api/stop-auto-trade', (req, res) => {
-  autoRunning = false
-  pushEvent('system', 'Engine Stopped')
-  res.json({ success: true })
+  stopAgent()
+  res.json({ success: true, message: 'Agent stopped', running: false })
 })
 
-// =========================
-// STATUS (UPDATED FOR UI)
-// =========================
-app.get('/api/status', (req, res) => {
-  const winRate =
-    stats.totalTrades > 0
-      ? (stats.wins / stats.totalTrades) * 100
-      : 0
-
-  res.json({
-    success: true,
-    running: autoRunning,
-    isAutoTrading: autoRunning,
-    currentDecision,
-    openPosition,
-    trades: tradeHistory,
-    hedgeMetrics,
-    market,
-    pendingIntents,
-
-    stats: {
-      ...stats,
-      winRate: Number(winRate.toFixed(2))
-    },
-
-    agent: {
-      address: AGENT_ADDRESS,
-      configured: !!agentWallet
-    }
-  })
+// ============================================
+// API: TWAK SIGN
+// ============================================
+app.post('/api/twak/sign', (req, res) => {
+  broadcast({ id: Date.now(), type: 'twak_sign', message: 'Intent signed', data: req.body, timestamp: Date.now() })
+  res.json({ success: true, intent: { ...req.body.intent, approved: true, signedAt: Date.now() } })
 })
 
-// =========================
+// ============================================
+// STARTUP
+// ============================================
 server.listen(PORT, () => {
-  console.log(`🚀 Syntra Hedge Fund Engine running on ${PORT}`)
-  console.log(`📍 Agent: ${AGENT_ADDRESS || 'NOT SET'}`)
+  console.log('========================================')
+  console.log('  SYNTA SERVER v2')
+  console.log('  Port: ' + PORT)
+  console.log('  Agent: ' + (AGENT_ADDRESS || 'NOT SET'))
+  console.log('========================================')
+  
+  // Clear stale state
+  if (fs.existsSync(STATE_FILE)) {
+    try {
+      const stale = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'))
+      const age = Date.now() - new Date(stale.lastUpdate).getTime()
+      if (age > 300000) {
+        console.log('Clearing stale state (age: ' + Math.round(age/60000) + ' min)')
+        fs.unlinkSync(STATE_FILE)
+      }
+    } catch (e) {}
+  }
+  
+  setTimeout(startAgent, 3000)
 })
+
+process.on('SIGINT', () => { stopAgent(); process.exit(0) })
+process.on('SIGTERM', () => { stopAgent(); process.exit(0) })
