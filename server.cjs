@@ -225,22 +225,9 @@ server.listen(PORT, () => {
   console.log('  SYNTA SERVER v2')
   console.log('  Port: ' + PORT)
   console.log('  Agent: ' + (AGENT_ADDRESS || 'NOT SET'))
-  console.log('========================================')
-  
-  // Clear stale state
-  if (fs.existsSync(STATE_FILE)) {
-    try {
-      const stale = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'))
-      const age = Date.now() - new Date(stale.lastUpdate).getTime()
-      if (age > 300000) {
-        console.log('Clearing stale state (age: ' + Math.round(age/60000) + ' min)')
-        fs.unlinkSync(STATE_FILE)
-      }
-    } catch (e) {}
-  }
-  
-  setTimeout(startAgent, 3000)
-})
+  console.log('========================================'))
 
 process.on('SIGINT', () => { stopAgent(); process.exit(0) })
 process.on('SIGTERM', () => { stopAgent(); process.exit(0) })
+
+

@@ -1,4 +1,4 @@
-﻿// src/agent/momentumAgent.cjs
+// src/agent/momentumAgent.cjs
 // Syntra Agent v21 - COMPETITION READY
 // Rules: 30% drawdown cap, 1 trade/day min, eligible tokens
 // TWAK: price, trending | Execution: ethers.js PancakeSwap
@@ -181,7 +181,7 @@ function addLog(type, message) {
 // ============================================
 // CONTROL
 // ============================================
-let tradingActive = true;
+let tradingActive = false;
 function checkControl() {
   try {
     if (fs.existsSync(CONTROL_FILE)) {
@@ -335,9 +335,14 @@ setTimeout(async () => {
   const p = await getPortfolio();
   history.peakCapital = p.totalUsd;
   saveHistory(history);
-  addLog('system', 'Portfolio: $' + p.totalUsd.toFixed(2) + ' | Rules: 30% DD, 1 trade/day min');
-  cycle();
-  setInterval(cycle, CYCLE_SECONDS * 1000);
+  addLog('system', 'AGENT IDLE - Click Start to trade');
+  saveState();
+  // Wait for Start button
+  setInterval(() => {
+    checkControl();
+    if (tradingActive) cycle();
+    else saveState();
+  }, CYCLE_SECONDS * 1000);
 }, 3000);
 process.on('SIGINT', function() {
   agentState.running = false;
@@ -345,3 +350,4 @@ process.on('SIGINT', function() {
   console.log('Shutdown. Trades: ' + history.totalTrades);
   process.exit(0);
 });
+
