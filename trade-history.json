@@ -1,64 +1,622 @@
-{
-  "trades": [
-    {
-      "symbol": "USDT",
-      "entryPrice": 0.998875711965846,
-      "entryTime": 1782203501411,
-      "costBnb": 0.0003,
-      "tokenAmount": 0.1713159838149689,
-      "txHash": "0x48abd94ec090c2a4f875959aa4f24d4788b80288bc170bce118301a07e89aa69",
-      "result": "OPEN"
-    },
-    {
-      "symbol": "BNB",
-      "result": "OPEN",
-      "entryPrice": 572.8101337076273,
-      "time": 1782206009993
-    },
-    {
-      "symbol": "BNB",
-      "result": "WIN",
-      "pnl": "0.000000",
-      "closeTx": "0xdedff5af2b250a428308d7c4e3ec8e20c52784f6ee7c786001a47737d251a3b3",
-      "closeTime": 1782206151039
-    },
-    {
-      "symbol": "BNB",
-      "result": "OPEN",
-      "entryPrice": 572.5687606484452,
-      "time": 1782206164847
-    },
-    {
-      "symbol": "BNB",
-      "result": "WIN",
-      "entryPrice": 572.5687606484452,
-      "exitPrice": 580,
-      "profit": "0.000000",
-      "closeTx": "0x44fb7a1c0a3a87ba2979132ae2d90c2fff1281cc9c75bfc97e4e21174c8bfd79",
-      "closeTime": 1782206526117
-    },
-    {
-      "symbol": "BNB",
-      "result": "LOSS",
-      "pnl": "-0.000000",
-      "closeTx": "0x048191812468a1f304355e3486f4bf7178ec77029ca0654f14c8b3db611f7b35",
-      "closeTime": 1782206526125
-    },
-    {
-      "symbol": "BNB",
-      "result": "LOSS",
-      "pnl": "-0.000000",
-      "closeTx": "0x383e409d0fc244ad6bd5cb1946fbbd743f584655e2e7bb67bf0f80b52bbc442f",
-      "closeTime": 1782206526230
-    }
-  ],
-  "totalTrades": 3,
-  "wins": 2,
-  "losses": 2,
-  "totalPnl": 2.5026688332222616e-7,
-  "totalProfit": 4.5384690658765325e-7,
-  "totalLoss": 2.0358002326542712e-7,
-  "lastTradeTime": 1782206164847,
-  "peakCapital": 0.3897533894135919,
-  "startCapital": 1.3631229638183813
-}
+[
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 65090.67320722158,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T15:38:17.543Z",
+    "orderId": "paper_1782315497543"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 65090.67320722158,
+    "exitPrice": 64965.339509773316,
+    "quantity": 0.001,
+    "pnl": -0.12533369744826633,
+    "pnlPercent": -0.19255246761583633,
+    "timestamp": "2026-06-24T15:38:31.233Z",
+    "orderId": "close_1782315511233"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64979.14562411705,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T15:48:06.368Z",
+    "orderId": "paper_1782316086367"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 64979.14562411705,
+    "exitPrice": 64939.85176681019,
+    "quantity": 0.001,
+    "pnl": -0.03929385730686045,
+    "pnlPercent": -0.06047148962863291,
+    "timestamp": "2026-06-24T15:48:58.611Z",
+    "orderId": "close_1782316138611"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 65060.777656373655,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T15:53:03.648Z",
+    "orderId": "paper_1782316383647"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 65060.777656373655,
+    "exitPrice": 65065.833495722785,
+    "quantity": 0.001,
+    "pnl": 0.005055839349130111,
+    "pnlPercent": 0.007770948229102181,
+    "timestamp": "2026-06-24T15:54:31.330Z",
+    "orderId": "close_1782316471329"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64973.10505418051,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T15:56:06.229Z",
+    "orderId": "paper_1782316566229"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 65023.3794107697,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T15:56:58.104Z",
+    "orderId": "paper_1782316618104"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 65004.727536881335,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T16:03:11.027Z",
+    "orderId": "paper_1782316991027"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 65004.727536881335,
+    "exitPrice": 65043.906042237264,
+    "quantity": 0.001,
+    "pnl": 0.039178505355928796,
+    "pnlPercent": 0.060270240089388416,
+    "timestamp": "2026-06-24T16:03:44.995Z",
+    "orderId": "close_1782317024995"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 65041.39277469775,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T16:09:38.984Z",
+    "orderId": "paper_1782317378983"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 65041.39277469775,
+    "exitPrice": 65071.18721447025,
+    "quantity": 0.001,
+    "pnl": 0.029794439772500483,
+    "pnlPercent": 0.04580842829688958,
+    "timestamp": "2026-06-24T16:10:37.318Z",
+    "orderId": "close_1782317437316"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64976.48971539808,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T16:12:26.715Z",
+    "orderId": "paper_1782317546715"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 64976.48971539808,
+    "exitPrice": 64906.34619650359,
+    "quantity": 0.001,
+    "pnl": -0.0701435188944888,
+    "pnlPercent": -0.10795215192713759,
+    "timestamp": "2026-06-24T16:12:49.757Z",
+    "orderId": "close_1782317569757"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64954.43465936743,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T16:14:17.707Z",
+    "orderId": "paper_1782317657707"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 64954.43465936743,
+    "exitPrice": 65086.17744312279,
+    "quantity": 0.001,
+    "pnl": 0.13174278375536233,
+    "pnlPercent": 0.20282338603399008,
+    "timestamp": "2026-06-24T16:14:40.265Z",
+    "orderId": "close_1782317680265"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 65007.6869589908,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T16:18:34.943Z",
+    "orderId": "paper_1782317914942"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 65044.896501533956,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T16:19:46.463Z",
+    "orderId": "paper_1782317986463"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 65044.896501533956,
+    "exitPrice": 64905.72264390353,
+    "quantity": 0.001,
+    "pnl": -0.13917385763042694,
+    "pnlPercent": -0.2139658376228537,
+    "timestamp": "2026-06-24T16:20:03.481Z",
+    "orderId": "close_1782318003480"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64979.22311538421,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T16:21:14.915Z",
+    "orderId": "paper_1782318074915"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 65093.10709523469,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T16:21:33.540Z",
+    "orderId": "paper_1782318093540"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64933.17020058528,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T16:22:45.478Z",
+    "orderId": "paper_1782318165477"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64924.78145496792,
+    "quantity": 0.001,
+    "timestamp": "2026-06-24T16:23:02.991Z",
+    "orderId": "paper_1782318182991"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64919.8369141994,
+    "quantity": 0.001,
+    "timestamp": "2026-06-25T09:21:26.026Z",
+    "orderId": "paper_1782379286025"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64922.82743882827,
+    "quantity": 0.001,
+    "timestamp": "2026-06-25T09:35:22.129Z",
+    "orderId": "paper_1782380122128"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 64922.82743882827,
+    "exitPrice": 65049.642744851146,
+    "quantity": 0.001,
+    "pnl": 0.1268153060228724,
+    "pnlPercent": 0.1953323831164866,
+    "timestamp": "2026-06-25T10:22:53.870Z",
+    "orderId": "close_1782382973870"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64912.08334548847,
+    "quantity": 0.001,
+    "timestamp": "2026-06-25T10:32:51.736Z",
+    "orderId": "paper_1782383571736"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 64912.08334548847,
+    "exitPrice": 64904.76065506161,
+    "quantity": 0.001,
+    "pnl": -0.007322690426859481,
+    "pnlPercent": -0.011280935766433409,
+    "timestamp": "2026-06-25T10:44:01.141Z",
+    "orderId": "close_1782384241140"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64996.23300306417,
+    "quantity": 0.001,
+    "timestamp": "2026-06-25T10:55:46.654Z",
+    "orderId": "paper_1782384946654"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 64999.16488875443,
+    "quantity": 0.001,
+    "timestamp": "2026-06-25T11:37:57.677Z",
+    "orderId": "paper_1782387477676"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59460,
+    "quantity": 0.00004709048099562731,
+    "timestamp": "2026-06-26T11:31:17.956Z",
+    "orderId": "1454364652300419072"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59420.57,
+    "exitPrice": 59454.39,
+    "quantity": 0.000045,
+    "pnl": -0.001097420499999835,
+    "pnlPercent": 0.056916317026245444,
+    "timestamp": "2026-06-26T11:42:16.756Z",
+    "orderId": "1454367419702198272"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59468.57,
+    "quantity": 0.00004708369479878194,
+    "timestamp": "2026-06-26T11:43:27.743Z",
+    "orderId": "1454367724485492736"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59468.57,
+    "exitPrice": 59460,
+    "quantity": 0.000046,
+    "pnl": -0.00274406100000002,
+    "pnlPercent": -0.014410973729483967,
+    "timestamp": "2026-06-26T11:44:54.181Z",
+    "orderId": "1454368081550786560"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59404.97,
+    "quantity": 0.00004713410342602647,
+    "timestamp": "2026-06-26T11:46:13.093Z",
+    "orderId": "1454368419125149696"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59433.05,
+    "exitPrice": 59437.82,
+    "quantity": 0.000046,
+    "pnl": -0.000988733199999814,
+    "pnlPercent": 0.008025837475944542,
+    "timestamp": "2026-06-26T11:48:06.844Z",
+    "orderId": "1454368889759612928"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59413.42,
+    "quantity": 0.00004712739983660257,
+    "timestamp": "2026-06-26T11:49:17.364Z",
+    "orderId": "1454369192575778816"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59413.42,
+    "exitPrice": 59447.13,
+    "quantity": 0.000046,
+    "pnl": -0.002444877199999862,
+    "pnlPercent": 0.05673802316041865,
+    "timestamp": "2026-06-26T11:50:51.124Z",
+    "orderId": "1454369568511246336"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59404.15,
+    "quantity": 0.00004713475405337842,
+    "timestamp": "2026-06-26T11:52:17.189Z",
+    "orderId": "1454369946321567744"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59404.15,
+    "exitPrice": 59319.17,
+    "quantity": 0.000046,
+    "pnl": -0.0034013308999996106,
+    "pnlPercent": -0.14305397855201019,
+    "timestamp": "2026-06-26T11:53:40.301Z",
+    "orderId": "1454370286940995584"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59349.99,
+    "quantity": 0.00004717776700552098,
+    "timestamp": "2026-06-26T11:54:59.905Z",
+    "orderId": "1454370628927766528"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59349.99,
+    "exitPrice": 59370.01,
+    "quantity": 0.000046,
+    "pnl": -0.0024015467999993767,
+    "pnlPercent": 0.033732103408956604,
+    "timestamp": "2026-06-26T11:56:21.012Z",
+    "orderId": "1454370962181996544"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59374.25,
+    "quantity": 0.00004715849042303692,
+    "timestamp": "2026-06-26T11:57:43.340Z",
+    "orderId": "1454371314532892672"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59374.25,
+    "exitPrice": 59423.48,
+    "quantity": 0.000046,
+    "pnl": -0.0026215752999996234,
+    "pnlPercent": 0.08291473155450646,
+    "timestamp": "2026-06-26T11:59:03.611Z",
+    "orderId": "1454371643009810432"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59480,
+    "quantity": 0.00004707464694014795,
+    "timestamp": "2026-06-26T12:01:51.633Z",
+    "orderId": "1454372355894689792"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59480,
+    "exitPrice": 59404.13,
+    "quantity": 0.000046,
+    "pnl": -0.003716901899999847,
+    "pnlPercent": -0.12755548083389634,
+    "timestamp": "2026-06-26T12:02:47.240Z",
+    "orderId": "1454372574141104128"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59474.55,
+    "quantity": 0.000047078960664687664,
+    "timestamp": "2026-06-26T12:06:57.720Z",
+    "orderId": "1454373639708229632"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59474.55,
+    "exitPrice": 59446.06,
+    "quantity": 0.000046,
+    "pnl": -0.0023901679999998038,
+    "pnlPercent": -0.04790284247633281,
+    "timestamp": "2026-06-26T12:07:48.316Z",
+    "orderId": "1454373843392020480"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59440.48,
+    "quantity": 0.000047105945308651605,
+    "timestamp": "2026-06-26T12:10:17.165Z",
+    "orderId": "1454374475997921280"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59440.48,
+    "exitPrice": 59396.08,
+    "quantity": 0.000046,
+    "pnl": -0.002852767799999878,
+    "pnlPercent": -0.07469657041800914,
+    "timestamp": "2026-06-26T12:10:47.082Z",
+    "orderId": "1454374587365081088"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59410.56,
+    "quantity": 0.00004712966853030842,
+    "timestamp": "2026-06-26T12:11:35.714Z",
+    "orderId": "1454374803048775680"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59410.56,
+    "exitPrice": 59447.13,
+    "quantity": 0.000046,
+    "pnl": -0.0023690536999994016,
+    "pnlPercent": 0.061554713505485026,
+    "timestamp": "2026-06-26T12:12:18.344Z",
+    "orderId": "1454374964185546752"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59495,
+    "quantity": 0.000047062778384738214,
+    "timestamp": "2026-06-26T12:12:46.183Z",
+    "orderId": "1454375101221847040"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59294.22,
+    "quantity": 0.000047222140707812666,
+    "timestamp": "2026-06-26T12:48:34.746Z",
+    "orderId": "1454384112881123328"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59294.22,
+    "exitPrice": 59268.73,
+    "quantity": 0.000046,
+    "pnl": -0.0030006240000002293,
+    "pnlPercent": -0.042989013094363315,
+    "timestamp": "2026-06-26T12:49:19.202Z",
+    "orderId": "1454384290971271168"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59370.64,
+    "quantity": 0.00004716135786981578,
+    "timestamp": "2026-06-26T12:51:34.061Z",
+    "orderId": "1454384861367255040"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59370.64,
+    "exitPrice": 59290,
+    "quantity": 0.000046,
+    "pnl": -0.003292786500000311,
+    "pnlPercent": -0.13582471066506674,
+    "timestamp": "2026-06-26T12:52:13.005Z",
+    "orderId": "1454385016795578368"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59253.16,
+    "quantity": 0.00004725486370684702,
+    "timestamp": "2026-06-26T12:57:58.425Z",
+    "orderId": "1454386467907321856"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59253.16,
+    "exitPrice": 59294.63,
+    "quantity": 0.000047,
+    "pnl": -0.0035065059999999093,
+    "pnlPercent": 0.06998782849723106,
+    "timestamp": "2026-06-26T12:58:41.155Z",
+    "orderId": "1454386644458160128"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59250.25,
+    "quantity": 0.00004725718456884148,
+    "timestamp": "2026-06-26T12:59:16.915Z",
+    "orderId": "1454386806098247680"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59250.25,
+    "exitPrice": 59211.01,
+    "quantity": 0.000047,
+    "pnl": -0.0023363946000003466,
+    "pnlPercent": -0.06622756866004886,
+    "timestamp": "2026-06-26T12:59:46.060Z",
+    "orderId": "1454386915334701056"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59161.02,
+    "quantity": 0.00004732846053026131,
+    "timestamp": "2026-06-26T13:00:31.469Z",
+    "orderId": "1454387119064629248"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59161.02,
+    "exitPrice": 59217.07,
+    "quantity": 0.000047,
+    "pnl": -0.0027365099999996367,
+    "pnlPercent": 0.09474143616861053,
+    "timestamp": "2026-06-26T13:01:00.182Z",
+    "orderId": "1454387229681008640"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59215.16,
+    "quantity": 0.00004728518845511858,
+    "timestamp": "2026-06-26T13:01:43.313Z",
+    "orderId": "1454387411713802240"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59215.16,
+    "exitPrice": 59221,
+    "quantity": 0.000047,
+    "pnl": -0.0030339168000002026,
+    "pnlPercent": 0.009862339306354606,
+    "timestamp": "2026-06-26T13:02:17.280Z",
+    "orderId": "1454387541389099008"
+  },
+  {
+    "type": "BUY",
+    "symbol": "BTCUSDT",
+    "price": 59199.23,
+    "quantity": 0.000047297912489740145,
+    "timestamp": "2026-06-26T13:02:54.513Z",
+    "orderId": "1454387718590054400"
+  },
+  {
+    "type": "SELL",
+    "symbol": "BTCUSDT",
+    "entryPrice": 59199.23,
+    "exitPrice": 59240,
+    "quantity": 0.000047,
+    "pnl": -0.002460413199999678,
+    "pnlPercent": 0.06886913900736591,
+    "timestamp": "2026-06-26T13:03:36.483Z",
+    "orderId": "1454387888337731585"
+  }
+]

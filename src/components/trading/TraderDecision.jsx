@@ -1,145 +1,116 @@
-import React, { useEffect, useState } from 'react'
+﻿// src/components/trading/TraderDecision.jsx - REDUCED RE-RENDERS
+import React, { useEffect, useState, useRef } from 'react'
 import AgentLogs from './AgentLogs'
 import HedgeFundPanel from './HedgeFundPanel'
 import { API_URL } from '../../utils/api'
 import { Brain, Play, Square } from 'lucide-react'
-
 export default function TraderDecision() {
   const [status, setStatus] = useState(null)
-  const [wallet, setWallet] = useState(null)
   const [running, setRunning] = useState(false)
   const [loading, setLoading] = useState(false)
-
-  // ======================
-  // STATUS STREAM
-  // ======================
+  const [trades, setTrades] = useState([])
+  const mountedRef = useRef(true)
+  const fetchIntervalRef = useRef(null)
   const fetchStatus = async () => {
+    if (!mountedRef.current) return
     try {
-      const res = await fetch(`${API_URL}/api/status`)
+      const res = await fetch(API_URL + '/api/status')
       const data = await res.json()
-
       if (data.success) {
         setStatus(data)
         setRunning(Boolean(data.isAutoTrading || data.running))
+        setTrades(data.trades || [])
       }
     } catch (err) {
-      console.error(err)
+      console.error('Status fetch error:', err)
     }
   }
-
-  // ======================
-  // WALLET
-  // ======================
-  const fetchWallet = async () => {
-    try {
-      const res = await fetch(`${API_URL}/api/agent-wallet`)
-      const data = await res.json()
-      if (data.success) setWallet(data)
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  // ======================
-  // START ENGINE
-  // ======================
   const start = async () => {
     setLoading(true)
-    await fetch(`${API_URL}/api/start-auto-trade`, { method: 'POST' })
-    await fetchStatus()
+    try {
+      await fetch(API_URL + '/api/start-auto-trade', { method: 'POST' })
+      await fetchStatus()
+    } catch (err) {
+      console.error('Start error:', err)
+    }
     setLoading(false)
   }
-
-  // ======================
-  // STOP ENGINE
-  // ======================
   const stop = async () => {
     setLoading(true)
-    await fetch(`${API_URL}/api/stop-auto-trade`, { method: 'POST' })
-    await fetchStatus()
+    try {
+      await fetch(API_URL + '/api/stop-auto-trade', { method: 'POST' })
+      await fetchStatus()
+    } catch (err) {
+      console.error('Stop error:', err)
+    }
     setLoading(false)
   }
-
-  // ======================
-  // LIVE LOOP
-  // ======================
   useEffect(() => {
+    mountedRef.current = true
     fetchStatus()
-    fetchWallet()
-
-    const t1 = setInterval(fetchStatus, 2000)
-    const t2 = setInterval(fetchWallet, 5000)
-
+    // Slower interval to reduce glitching
+    fetchIntervalRef.current = setInterval(fetchStatus, 5000)
     return () => {
-      clearInterval(t1)
-      clearInterval(t2)
+      mountedRef.current = false
+      if (fetchIntervalRef.current) {
+        clearInterval(fetchIntervalRef.current)
+      }
     }
   }, [])
-
-  const address = wallet?.address || status?.agent?.address
-
+  const address = status?.agent?.address || 'Not connected'
   return (
     <div style={{
-      padding: 20,
+      padding: '20px',
       background: '#0B0B0F',
-      borderRadius: 16,
+      borderRadius: '16px',
       color: 'white',
       border: '1px solid rgba(255,255,255,0.08)'
     }}>
-
-      {/* HEADER */}
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <Brain />
-          <h3>Hedge Fund AI Engine</h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <Brain size={20} />
+          <h3 style={{ margin: 0 }}>Hedge Fund AI Engine</h3>
         </div>
-
         <button
           onClick={running ? stop : start}
           disabled={loading}
           style={{
             padding: '8px 14px',
-            borderRadius: 10,
+            borderRadius: '10px',
             border: 'none',
             background: running ? '#EF4444' : '#00D4AA',
             color: 'white',
-            cursor: 'pointer',
+            cursor: loading ? 'default' : 'pointer',
             display: 'flex',
-            gap: 6,
-            alignItems: 'center'
+            gap: '6px',
+            alignItems: 'center',
+            opacity: loading ? 0.5 : 1
           }}
         >
           {running ? <Square size={16} /> : <Play size={16} />}
           {running ? 'Stop' : 'Start'}
         </button>
       </div>
-
-      {/* WALLET */}
-      <div style={{ marginTop: 10, color: '#aaa' }}>
-        Agent Wallet: {address ? address.slice(0, 10) + '...' : 'Not connected'}
-      </div>
-
-      {/* STATUS */}
+      {/* node */}
       <div style={{
-        marginTop: 15,
-        padding: 12,
+        marginTop: '15px',
+        padding: '12px',
         background: '#111827',
-        borderRadius: 12
+        borderRadius: '12px',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+        gap: '8px'
       }}>
-        <div>Mode: {status?.running ? 'LIVE' : 'IDLE'}</div>
-        <div>Open Position: {status?.openPosition ? 'YES' : 'NO'}</div>
-        <div>Total Trades: {status?.trades?.length || 0}</div>
+        <div>Mode: <span style={{ color: running ? '#00D4AA' : '#888' }}>{running ? 'LIVE' : 'IDLE'}</span></div>
+        <div>Open Position: <span style={{ color: status?.openPosition ? '#00D4AA' : '#888' }}>{status?.openPosition ? 'YES' : 'NO'}</span></div>
+       <div>Total Trades: <span style={{ color: 'white' }}>{status?.stats?.totalTrades || trades.length || 0}</span></div>
       </div>
-
-      {/* PANELS */}
-      <div style={{ marginTop: 20 }}>
+      <div style={{ marginTop: '20px' }}>
         <AgentLogs />
       </div>
-
-      <div style={{ marginTop: 20 }}>
-        <HedgeFundPanel status={status} />
+      <div style={{ marginTop: '20px' }}>
+        <HedgeFundPanel status={status} trades={trades} />
       </div>
-
     </div>
   )
 }

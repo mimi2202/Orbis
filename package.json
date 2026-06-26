@@ -17,7 +17,7 @@
     "@rainbow-me/rainbowkit": "^2.2.11",
     "@tanstack/react-query": "^5.101.0",
     "@uniswap/sdk": "^3.0.3",
-    "axios": "^1.18.0",
+    "axios": "^1.18.1",
     "binance-api-node": "^0.13.10",
     "body-parser": "^2.3.0",
     "buffer": "^6.0.3",
@@ -28,6 +28,7 @@
     "express": "^5.2.1",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.263.1",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "viem": "^2.52.2",
@@ -35,6 +36,8 @@
     "ws": "^8.21.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/node": "^7.29.7",
     "@tailwindcss/vite": "4.0.0-alpha.20",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",

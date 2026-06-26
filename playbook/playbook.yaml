@@ -1,0 +1,19 @@
+﻿name: "Syntra V2 Strategy"
+description: "Adaptive market regime strategy - trend following in trending markets, mean reversion in ranging markets"
+version: "1.0.0"
+author: "Syntra AI"
+symbol: "BTCUSDT"
+interval: "1h"
+# Strategy settings
+settings:
+  sma_fast: 20
+  sma_slow: 50
+  rsi_period: 14
+  volatility_period: 20
+  confidence_threshold: 60
+# Risk management
+risk:
+  max_position_size: 1.0
+  max_leverage: 1
+  stop_loss: 0.02
+  take_profit: 0.04

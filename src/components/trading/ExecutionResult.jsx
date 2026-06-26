@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+﻿import React, { useState, useEffect, useMemo } from 'react'
 import { API_URL } from '../../utils/api'
 import { CheckCircle, XCircle, Clock, Hash, Zap, Bot } from 'lucide-react'
 
@@ -10,16 +10,19 @@ const safeNumber = (value, fallback = 0) => {
 export default function ExecutionResult({ isMobile = false }) {
   const [recordedTrades, setRecordedTrades] = useState([])
   const [status, setStatus] = useState(null)
+  const [totalTrades, setTotalTrades] = useState(0)
 
   useEffect(() => {
     const fetchTrades = async () => {
       try {
         const response = await fetch(`${API_URL}/api/status`)
         const data = await response.json()
-
         if (data.success) {
           setStatus(data)
-          setRecordedTrades(Array.isArray(data.trades) ? data.trades : [])
+          const trades = Array.isArray(data.trades) ? data.trades : []
+          setRecordedTrades(trades)
+          const tradeCount = data.stats?.totalTrades || trades.length || 0
+          setTotalTrades(tradeCount)
         }
       } catch (error) {
         console.error('Failed to fetch trades:', error)
@@ -36,14 +39,19 @@ export default function ExecutionResult({ isMobile = false }) {
     return recordedTrades[recordedTrades.length - 1]
   }, [recordedTrades])
 
-  const isRealTx =
-    latestTrade?.txHash?.startsWith('0x') && latestTrade?.txHash?.length === 66
+  // Bitget spot returns an orderId (not a 0x blockchain hash). The orderId is
+  // the real proof the order hit the exchange and filled.
+  const orderId = latestTrade?.orderId || latestTrade?.txHash || null
+  const hasExecuted = !!latestTrade && !!orderId
 
   const pnl = safeNumber(latestTrade?.pnl, 0)
-  const totalPnL = safeNumber(status?.totalPnL, 0)
-  const result = latestTrade?.result || 'PENDING'
+  const totalPnL = safeNumber(status?.stats?.pnl || status?.totalPnL || 0, 0)
+  // A BUY opens a position (no realized PnL yet) -> treat as success/open.
+  const action = latestTrade?.action || latestTrade?.type || 'TRADE'
+  const isBuy = action === 'BUY'
+  const result = latestTrade?.result || (isBuy ? 'OPEN' : (pnl >= 0 ? 'WIN' : 'LOSS'))
   const isPositive = pnl >= 0
-  const isOpen = result === 'OPEN'
+  const isOpen = result === 'OPEN' || isBuy
 
   return (
     <div
@@ -70,7 +78,7 @@ export default function ExecutionResult({ isMobile = false }) {
               width: isMobile ? '40px' : '48px',
               height: isMobile ? '40px' : '48px',
               borderRadius: isMobile ? '12px' : '14px',
-              background: 'linear-gradient(135deg, #FF6B6B, #F87171)',
+              background: 'linear-gradient(135deg, #00D4AA, #3B82F6)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -79,7 +87,6 @@ export default function ExecutionResult({ isMobile = false }) {
           >
             <Zap size={isMobile ? 18 : 22} style={{ color: 'white' }} />
           </div>
-
           <div>
             <h3 style={{ fontSize: isMobile ? '15px' : '17px', fontWeight: 600 }}>
               Execution Result
@@ -87,28 +94,27 @@ export default function ExecutionResult({ isMobile = false }) {
             <p
               style={{
                 fontSize: isMobile ? '11px' : '12px',
-                color: isRealTx ? '#00D4AA' : 'rgba(255,255,255,0.35)'
+                color: hasExecuted ? '#00D4AA' : 'rgba(255,255,255,0.35)'
               }}
             >
-              {isRealTx ? '🔴 REAL BSC TX' : '🤖 Autonomous agent execution'}
+              {hasExecuted ? '🟢 REAL BITGET ORDER' : '🤖 Autonomous agent execution'}
             </p>
           </div>
         </div>
-
         <div
           style={{
             padding: isMobile ? '2px 10px' : '4px 14px',
             borderRadius: '100px',
             fontSize: isMobile ? '10px' : '12px',
-            background: latestTrade ? 'rgba(0,212,170,0.1)' : 'rgba(255,255,255,0.04)',
-            color: latestTrade ? '#00D4AA' : 'rgba(255,255,255,0.3)'
+            background: hasExecuted ? 'rgba(0,212,170,0.12)' : 'rgba(255,255,255,0.04)',
+            color: hasExecuted ? '#00D4AA' : 'rgba(255,255,255,0.3)'
           }}
         >
-          {latestTrade ? '✅ Agent Executed' : 'Pending'}
+          {hasExecuted ? '✅ Filled' : 'Pending'}
         </div>
       </div>
 
-      {latestTrade ? (
+      {hasExecuted ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '12px' : '16px' }}>
           <div
             style={{
@@ -118,7 +124,7 @@ export default function ExecutionResult({ isMobile = false }) {
               alignItems: 'center',
               gap: isMobile ? '12px' : '16px',
               background: isPositive || isOpen ? 'rgba(0,212,170,0.05)' : 'rgba(255,107,107,0.05)',
-              border: `1px solid ${isPositive || isOpen ? 'rgba(0,212,170,0.1)' : 'rgba(255,107,107,0.1)'}`,
+              border: `1px solid ${isPositive || isOpen ? 'rgba(0,212,170,0.2)' : 'rgba(255,107,107,0.2)'}`,
               flexWrap: 'wrap'
             }}
           >
@@ -127,7 +133,6 @@ export default function ExecutionResult({ isMobile = false }) {
             ) : (
               <XCircle size={isMobile ? 24 : 28} style={{ color: '#FF6B6B' }} />
             )}
-
             <div>
               <p
                 style={{
@@ -136,28 +141,25 @@ export default function ExecutionResult({ isMobile = false }) {
                   color: isPositive || isOpen ? '#00D4AA' : '#FF6B6B'
                 }}
               >
-                {latestTrade.action} — {result}
+                {action} — {result}
               </p>
-
               <p
                 style={{
                   fontSize: isMobile ? '13px' : '14px',
                   color: pnl >= 0 ? '#00D4AA' : '#FF6B6B'
                 }}
               >
-                Trade P&L: {pnl.toFixed(10)} BNB
+                Trade P&L: {pnl >= 0 ? '+' : ''}{pnl.toFixed(2)} USDT
               </p>
-
               <p
                 style={{
                   fontSize: isMobile ? '12px' : '13px',
                   color: totalPnL >= 0 ? '#00D4AA' : '#FF6B6B'
                 }}
               >
-                Total P&L: {totalPnL.toFixed(10)} BNB
+                Total P&L: {totalPnL >= 0 ? '+' : ''}{totalPnL.toFixed(2)} USDT
               </p>
             </div>
-
             <div
               style={{
                 padding: '4px 12px',
@@ -173,7 +175,7 @@ export default function ExecutionResult({ isMobile = false }) {
             </div>
           </div>
 
-          {latestTrade.txHash && (
+          {orderId && (
             <div
               style={{
                 padding: isMobile ? '12px' : '14px',
@@ -190,10 +192,9 @@ export default function ExecutionResult({ isMobile = false }) {
                     color: 'rgba(255,255,255,0.3)'
                   }}
                 >
-                  BSC Transaction Hash
+                  Bitget Order ID
                 </span>
               </div>
-
               <p
                 style={{
                   fontSize: isMobile ? '10px' : '12px',
@@ -202,23 +203,38 @@ export default function ExecutionResult({ isMobile = false }) {
                   wordBreak: 'break-all'
                 }}
               >
-                {latestTrade.txHash}
+                {orderId}
               </p>
-
-              <a
-                href={`https://bscscan.com/tx/${latestTrade.txHash}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-block',
-                  marginTop: '6px',
-                  fontSize: '11px',
-                  color: '#6C3CE1',
-                  textDecoration: 'none'
-                }}
-              >
-                🔗 View on BSCScan
-              </a>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
+                <a
+                  href="https://www.bitget.com/spot/BTCUSDT"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontSize: '11px',
+                    color: '#6C3CE1',
+                    textDecoration: 'none'
+                  }}
+                >
+                  🔗 View on Bitget (Orders → Order History)
+                </a>
+                <button
+                  onClick={() => {
+                    try { navigator.clipboard.writeText(orderId) } catch (e) {}
+                  }}
+                  style={{
+                    fontSize: '10px',
+                    color: '#00D4AA',
+                    background: 'rgba(0,212,170,0.08)',
+                    border: '1px solid rgba(0,212,170,0.2)',
+                    borderRadius: '6px',
+                    padding: '3px 8px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Copy Order ID
+                </button>
+              </div>
             </div>
           )}
 
@@ -236,9 +252,7 @@ export default function ExecutionResult({ isMobile = false }) {
               Executed:{' '}
               {latestTrade.timestamp ? new Date(latestTrade.timestamp).toLocaleTimeString() : '...'}
             </span>
-
-            <span>Conviction: {Math.round(safeNumber(latestTrade.conviction, 0))}%</span>
-
+            <span>Conviction: {Math.round(safeNumber(latestTrade.conviction || latestTrade.confidence, 0))}%</span>
             <span style={{ color: '#00D4AA' }}>🤖 Autonomous</span>
           </div>
 
@@ -253,7 +267,7 @@ export default function ExecutionResult({ isMobile = false }) {
               textAlign: 'center'
             }}
           >
-            📊 {recordedTrades.length} total autonomous trades recorded
+            📊 {totalTrades} total autonomous trades recorded
           </div>
         </div>
       ) : (
@@ -265,13 +279,11 @@ export default function ExecutionResult({ isMobile = false }) {
           }}
         >
           <Clock size={isMobile ? 32 : 40} style={{ margin: '0 auto 16px', opacity: 0.2 }} />
-
           <p style={{ fontSize: isMobile ? '14px' : '15px', color: 'rgba(255,255,255,0.4)' }}>
             Awaiting autonomous execution...
           </p>
-
           <p style={{ fontSize: isMobile ? '12px' : '13px', marginTop: '6px', color: 'rgba(255,255,255,0.2)' }}>
-            Syntra will execute trades from the funded agent wallet.
+            Orbis will execute trades from the funded agent wallet.
           </p>
         </div>
       )}

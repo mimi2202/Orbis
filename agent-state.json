@@ -1,152 +1,962 @@
 {
-  "running": true,
-  "agent": {
-    "address": "0x204b13fe30C141cfA4E8a3D6136aA3391db846C2",
-    "configured": true
-  },
-  "market": {
-    "btc": 0
-  },
-  "trades": [
+  "state": "running",
+  "lastUpdate": "2026-06-26T13:04:57.410Z",
+  "message": "Cycle complete",
+  "logs": [
     {
-      "symbol": "USDT",
-      "entryPrice": 0.998875711965846,
-      "entryTime": 1782203501411,
-      "costBnb": 0.0003,
-      "tokenAmount": 0.1713159838149689,
-      "txHash": "0x48abd94ec090c2a4f875959aa4f24d4788b80288bc170bce118301a07e89aa69",
-      "result": "OPEN"
+      "id": 1782478662284.796,
+      "type": "system",
+      "message": "Agent started (real execution)",
+      "timestamp": 1782478661974
     },
     {
-      "symbol": "BNB",
-      "result": "OPEN",
-      "entryPrice": 572.8101337076273,
-      "time": 1782206009993
+      "id": 1782478662044.841,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478661975
     },
     {
-      "symbol": "BNB",
-      "result": "WIN",
-      "pnl": "0.000000",
-      "closeTx": "0xdedff5af2b250a428308d7c4e3ec8e20c52784f6ee7c786001a47737d251a3b3",
-      "closeTime": 1782206151039
+      "id": 1782478662036.5884,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478661975
     },
     {
-      "symbol": "BNB",
-      "result": "OPEN",
-      "entryPrice": 572.5687606484452,
-      "time": 1782206164847
+      "id": 1782478665220.2412,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 47, trend bearish",
+      "timestamp": 1782478665162
     },
     {
-      "symbol": "BNB",
-      "result": "WIN",
-      "entryPrice": 572.5687606484452,
-      "exitPrice": 580,
-      "profit": "0.000000",
-      "closeTx": "0x44fb7a1c0a3a87ba2979132ae2d90c2fff1281cc9c75bfc97e4e21174c8bfd79",
-      "closeTime": 1782206526117
+      "id": 1782478686745.9658,
+      "type": "signal_buy",
+      "message": "BUY BTCUSDT @ $59253.16",
+      "timestamp": 1782478685777
     },
     {
-      "symbol": "BNB",
-      "result": "LOSS",
-      "pnl": "-0.000000",
-      "closeTx": "0x048191812468a1f304355e3486f4bf7178ec77029ca0654f14c8b3db611f7b35",
-      "closeTime": 1782206526125
+      "id": 1782478700933.712,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478700789
     },
     {
-      "symbol": "BNB",
-      "result": "LOSS",
-      "pnl": "-0.000000",
-      "closeTx": "0x383e409d0fc244ad6bd5cb1946fbbd743f584655e2e7bb67bf0f80b52bbc442f",
-      "closeTime": 1782206526230
+      "id": 1782478706144.737,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478705371
+    },
+    {
+      "id": 1782478709778.4153,
+      "type": "agent_log",
+      "message": "Qwen: SELL (66%) - Trend/MACD turning down - protect the position",
+      "timestamp": 1782478708962
+    },
+    {
+      "id": 1782478721365.228,
+      "type": "position_close",
+      "message": "SELL BTCUSDT @ $59294.63 | PnL: $-0.00",
+      "timestamp": 1782478721156
+    },
+    {
+      "id": 1782478736220.011,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478736160
+    },
+    {
+      "id": 1782478736859.2764,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478736160
+    },
+    {
+      "id": 1782478750366.2024,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 47, trend bearish",
+      "timestamp": 1782478749741
+    },
+    {
+      "id": 1782478759062.5806,
+      "type": "signal_buy",
+      "message": "BUY BTCUSDT @ $59250.25",
+      "timestamp": 1782478758980
+    },
+    {
+      "id": 1782478774364.8884,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478773983
+    },
+    {
+      "id": 1782478776279.5256,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478775935
+    },
+    {
+      "id": 1782478779049.5693,
+      "type": "agent_log",
+      "message": "Qwen: SELL (66%) - Trend/MACD turning down - protect the position",
+      "timestamp": 1782478778292
+    },
+    {
+      "id": 1782478787058.2651,
+      "type": "position_close",
+      "message": "SELL BTCUSDT @ $59211.01 | PnL: $-0.00",
+      "timestamp": 1782478786065
+    },
+    {
+      "id": 1782478801908.5732,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478801078
+    },
+    {
+      "id": 1782478802003.4436,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478801078
+    },
+    {
+      "id": 1782478804505.9353,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 45, trend bearish",
+      "timestamp": 1782478803540
+    },
+    {
+      "id": 1782478804307.3494,
+      "type": "trade_blocked",
+      "message": "BLOCKED - Cooldown 3s",
+      "timestamp": 1782478803540
+    },
+    {
+      "id": 1782478819470.6758,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478818548
+    },
+    {
+      "id": 1782478818908.4236,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478818548
+    },
+    {
+      "id": 1782478828174.392,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 42, trend bearish",
+      "timestamp": 1782478827823
+    },
+    {
+      "id": 1782478834584.0251,
+      "type": "signal_buy",
+      "message": "BUY BTCUSDT @ $59161.02",
+      "timestamp": 1782478834176
+    },
+    {
+      "id": 1782478849914.2527,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478849180
+    },
+    {
+      "id": 1782478851778.708,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478851521
+    },
+    {
+      "id": 1782478854317.0796,
+      "type": "agent_log",
+      "message": "Qwen: SELL (66%) - Trend/MACD turning down - protect the position",
+      "timestamp": 1782478853569
+    },
+    {
+      "id": 1782478860549.4128,
+      "type": "position_close",
+      "message": "SELL BTCUSDT @ $59217.07 | PnL: $-0.00",
+      "timestamp": 1782478860183
+    },
+    {
+      "id": 1782478875209.18,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478875191
+    },
+    {
+      "id": 1782478876024.2266,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478875191
+    },
+    {
+      "id": 1782478883819.481,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 42, trend bearish",
+      "timestamp": 1782478883510
+    },
+    {
+      "id": 1782478906069.9602,
+      "type": "signal_buy",
+      "message": "BUY BTCUSDT @ $59215.16",
+      "timestamp": 1782478905073
+    },
+    {
+      "id": 1782478920952.9084,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478920075
+    },
+    {
+      "id": 1782478923533.0825,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478922848
+    },
+    {
+      "id": 1782478926014.7307,
+      "type": "agent_log",
+      "message": "Qwen: SELL (66%) - Trend/MACD turning down - protect the position",
+      "timestamp": 1782478925136
+    },
+    {
+      "id": 1782478937393.083,
+      "type": "position_close",
+      "message": "SELL BTCUSDT @ $59221 | PnL: $-0.00",
+      "timestamp": 1782478937281
+    },
+    {
+      "id": 1782478952805.6921,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478952291
+    },
+    {
+      "id": 1782478953246.9502,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478952291
+    },
+    {
+      "id": 1782478964215.2698,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 43, trend bearish",
+      "timestamp": 1782478964101
+    },
+    {
+      "id": 1782478984820.0635,
+      "type": "signal_buy",
+      "message": "BUY BTCUSDT @ $59199.23",
+      "timestamp": 1782478984699
+    },
+    {
+      "id": 1782478999748.991,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478999708
+    },
+    {
+      "id": 1782479002902.946,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782479002756
+    },
+    {
+      "id": 1782479010376.199,
+      "type": "agent_log",
+      "message": "Qwen: SELL (66%) - Trend/MACD turning down - protect the position",
+      "timestamp": 1782479010351
+    },
+    {
+      "id": 1782479017021.2302,
+      "type": "position_close",
+      "message": "SELL BTCUSDT @ $59240 | PnL: $-0.00",
+      "timestamp": 1782479016485
+    },
+    {
+      "id": 1782479032409.9927,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782479031493
+    },
+    {
+      "id": 1782479031918.1814,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782479031493
+    },
+    {
+      "id": 1782479041319.5386,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 44, trend bearish",
+      "timestamp": 1782479040462
+    },
+    {
+      "id": 1782479041020.1,
+      "type": "trade_blocked",
+      "message": "BLOCKED - Daily trade limit reached",
+      "timestamp": 1782479040462
+    },
+    {
+      "id": 1782479055864.9927,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782479055476
+    },
+    {
+      "id": 1782479055844.532,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782479055476
+    },
+    {
+      "id": 1782479060349.6335,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 43, trend bearish",
+      "timestamp": 1782479060255
+    },
+    {
+      "id": 1782479060267.5684,
+      "type": "trade_blocked",
+      "message": "BLOCKED - Daily trade limit reached",
+      "timestamp": 1782479060255
+    },
+    {
+      "id": 1782479075735.3718,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782479075271
+    },
+    {
+      "id": 1782479075527.9482,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782479075271
+    },
+    {
+      "id": 1782479080056.0525,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 43, trend bearish",
+      "timestamp": 1782479079679
+    },
+    {
+      "id": 1782479080628.7878,
+      "type": "trade_blocked",
+      "message": "BLOCKED - Daily trade limit reached",
+      "timestamp": 1782479079679
+    },
+    {
+      "id": 1782479095188.286,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782479094682
+    },
+    {
+      "id": 1782479095278.0305,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782479094682
+    },
+    {
+      "id": 1782479098291.4202,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 42, trend bearish",
+      "timestamp": 1782479097410
+    },
+    {
+      "id": 1782479098117.7944,
+      "type": "trade_blocked",
+      "message": "BLOCKED - Daily trade limit reached",
+      "timestamp": 1782479097410
     }
   ],
-  "openPosition": null,
-  "currentDecision": null,
   "stats": {
-    "totalTrades": 3,
-    "wins": 2,
-    "losses": 2,
-    "pnl": 2.5026688332222616e-7,
-    "winRate": "66.7",
-    "totalProfit": 4.5384690658765325e-7,
-    "totalLoss": 2.0358002326542712e-7
+    "balance": 2.8742021868000003,
+    "totalTrades": 28,
+    "wins": 5,
+    "losses": 23,
+    "winRate": 17.857142857142858,
+    "pnl": -0.09607633485110528,
+    "totalPnl": -0.09607633485110528,
+    "drawdown": 0.7645138640653734,
+    "dailyTrades": 10,
+    "position": null
   },
-  "topMomentum": [],
-  "bnbBalance": 0.000680388006583416,
-  "usdValue": 0.38973996454519544,
-  "totalUsd": 0.38973996454519544,
-  "drawdown": 0.0034444519947981742,
-  "lastUpdate": "2026-06-23T09:32:17.860Z",
+  "data": {
+    "stats": {
+      "balance": 2.8742021868000003,
+      "totalTrades": 28,
+      "wins": 5,
+      "losses": 23,
+      "winRate": 17.857142857142858,
+      "pnl": -0.09607633485110528,
+      "totalPnl": -0.09607633485110528,
+      "drawdown": 0.7645138640653734,
+      "dailyTrades": 10,
+      "position": null
+    }
+  },
+  "symbol": "BTCUSDT",
+  "position": null,
+  "trades": [
+    {
+      "type": "SELL",
+      "symbol": "BTCUSDT",
+      "entryPrice": 59474.55,
+      "exitPrice": 59446.06,
+      "quantity": 0.000046,
+      "pnl": -0.0023901679999998038,
+      "pnlPercent": -0.04790284247633281,
+      "timestamp": "2026-06-26T12:07:48.316Z",
+      "orderId": "1454373843392020480"
+    },
+    {
+      "type": "BUY",
+      "symbol": "BTCUSDT",
+      "price": 59440.48,
+      "quantity": 0.000047105945308651605,
+      "timestamp": "2026-06-26T12:10:17.165Z",
+      "orderId": "1454374475997921280"
+    },
+    {
+      "type": "SELL",
+      "symbol": "BTCUSDT",
+      "entryPrice": 59440.48,
+      "exitPrice": 59396.08,
+      "quantity": 0.000046,
+      "pnl": -0.002852767799999878,
+      "pnlPercent": -0.07469657041800914,
+      "timestamp": "2026-06-26T12:10:47.082Z",
+      "orderId": "1454374587365081088"
+    },
+    {
+      "type": "BUY",
+      "symbol": "BTCUSDT",
+      "price": 59410.56,
+      "quantity": 0.00004712966853030842,
+      "timestamp": "2026-06-26T12:11:35.714Z",
+      "orderId": "1454374803048775680"
+    },
+    {
+      "type": "SELL",
+      "symbol": "BTCUSDT",
+      "entryPrice": 59410.56,
+      "exitPrice": 59447.13,
+      "quantity": 0.000046,
+      "pnl": -0.0023690536999994016,
+      "pnlPercent": 0.061554713505485026,
+      "timestamp": "2026-06-26T12:12:18.344Z",
+      "orderId": "1454374964185546752"
+    },
+    {
+      "type": "BUY",
+      "symbol": "BTCUSDT",
+      "price": 59495,
+      "quantity": 0.000047062778384738214,
+      "timestamp": "2026-06-26T12:12:46.183Z",
+      "orderId": "1454375101221847040"
+    },
+    {
+      "type": "BUY",
+      "symbol": "BTCUSDT",
+      "price": 59294.22,
+      "quantity": 0.000047222140707812666,
+      "timestamp": "2026-06-26T12:48:34.746Z",
+      "orderId": "1454384112881123328"
+    },
+    {
+      "type": "SELL",
+      "symbol": "BTCUSDT",
+      "entryPrice": 59294.22,
+      "exitPrice": 59268.73,
+      "quantity": 0.000046,
+      "pnl": -0.0030006240000002293,
+      "pnlPercent": -0.042989013094363315,
+      "timestamp": "2026-06-26T12:49:19.202Z",
+      "orderId": "1454384290971271168"
+    },
+    {
+      "type": "BUY",
+      "symbol": "BTCUSDT",
+      "price": 59370.64,
+      "quantity": 0.00004716135786981578,
+      "timestamp": "2026-06-26T12:51:34.061Z",
+      "orderId": "1454384861367255040"
+    },
+    {
+      "type": "SELL",
+      "symbol": "BTCUSDT",
+      "entryPrice": 59370.64,
+      "exitPrice": 59290,
+      "quantity": 0.000046,
+      "pnl": -0.003292786500000311,
+      "pnlPercent": -0.13582471066506674,
+      "timestamp": "2026-06-26T12:52:13.005Z",
+      "orderId": "1454385016795578368"
+    },
+    {
+      "type": "BUY",
+      "symbol": "BTCUSDT",
+      "price": 59253.16,
+      "quantity": 0.00004725486370684702,
+      "timestamp": "2026-06-26T12:57:58.425Z",
+      "orderId": "1454386467907321856"
+    },
+    {
+      "type": "SELL",
+      "symbol": "BTCUSDT",
+      "entryPrice": 59253.16,
+      "exitPrice": 59294.63,
+      "quantity": 0.000047,
+      "pnl": -0.0035065059999999093,
+      "pnlPercent": 0.06998782849723106,
+      "timestamp": "2026-06-26T12:58:41.155Z",
+      "orderId": "1454386644458160128"
+    },
+    {
+      "type": "BUY",
+      "symbol": "BTCUSDT",
+      "price": 59250.25,
+      "quantity": 0.00004725718456884148,
+      "timestamp": "2026-06-26T12:59:16.915Z",
+      "orderId": "1454386806098247680"
+    },
+    {
+      "type": "SELL",
+      "symbol": "BTCUSDT",
+      "entryPrice": 59250.25,
+      "exitPrice": 59211.01,
+      "quantity": 0.000047,
+      "pnl": -0.0023363946000003466,
+      "pnlPercent": -0.06622756866004886,
+      "timestamp": "2026-06-26T12:59:46.060Z",
+      "orderId": "1454386915334701056"
+    },
+    {
+      "type": "BUY",
+      "symbol": "BTCUSDT",
+      "price": 59161.02,
+      "quantity": 0.00004732846053026131,
+      "timestamp": "2026-06-26T13:00:31.469Z",
+      "orderId": "1454387119064629248"
+    },
+    {
+      "type": "SELL",
+      "symbol": "BTCUSDT",
+      "entryPrice": 59161.02,
+      "exitPrice": 59217.07,
+      "quantity": 0.000047,
+      "pnl": -0.0027365099999996367,
+      "pnlPercent": 0.09474143616861053,
+      "timestamp": "2026-06-26T13:01:00.182Z",
+      "orderId": "1454387229681008640"
+    },
+    {
+      "type": "BUY",
+      "symbol": "BTCUSDT",
+      "price": 59215.16,
+      "quantity": 0.00004728518845511858,
+      "timestamp": "2026-06-26T13:01:43.313Z",
+      "orderId": "1454387411713802240"
+    },
+    {
+      "type": "SELL",
+      "symbol": "BTCUSDT",
+      "entryPrice": 59215.16,
+      "exitPrice": 59221,
+      "quantity": 0.000047,
+      "pnl": -0.0030339168000002026,
+      "pnlPercent": 0.009862339306354606,
+      "timestamp": "2026-06-26T13:02:17.280Z",
+      "orderId": "1454387541389099008"
+    },
+    {
+      "type": "BUY",
+      "symbol": "BTCUSDT",
+      "price": 59199.23,
+      "quantity": 0.000047297912489740145,
+      "timestamp": "2026-06-26T13:02:54.513Z",
+      "orderId": "1454387718590054400"
+    },
+    {
+      "type": "SELL",
+      "symbol": "BTCUSDT",
+      "entryPrice": 59199.23,
+      "exitPrice": 59240,
+      "quantity": 0.000047,
+      "pnl": -0.002460413199999678,
+      "pnlPercent": 0.06886913900736591,
+      "timestamp": "2026-06-26T13:03:36.483Z",
+      "orderId": "1454387888337731585"
+    }
+  ],
   "_logs": [
     {
-      "id": 1782207137860,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782207137860
+      "id": 1782478662284.796,
+      "type": "system",
+      "message": "Agent started (real execution)",
+      "timestamp": 1782478661974
     },
     {
-      "id": 1782207125465,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782207125465
+      "id": 1782478662044.841,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478661975
     },
     {
-      "id": 1782207108305,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782207108305
+      "id": 1782478662036.5884,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478661975
     },
     {
-      "id": 1782207094140,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782207094140
+      "id": 1782478665220.2412,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 47, trend bearish",
+      "timestamp": 1782478665162
     },
     {
-      "id": 1782207079239,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782207079239
+      "id": 1782478686745.9658,
+      "type": "signal_buy",
+      "message": "BUY BTCUSDT @ $59253.16",
+      "timestamp": 1782478685777
     },
     {
-      "id": 1782207063585,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782207063585
+      "id": 1782478700933.712,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478700789
     },
     {
-      "id": 1782207049142,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782207049142
+      "id": 1782478706144.737,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478705371
     },
     {
-      "id": 1782207033181,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782207033181
+      "id": 1782478709778.4153,
+      "type": "agent_log",
+      "message": "Qwen: SELL (66%) - Trend/MACD turning down - protect the position",
+      "timestamp": 1782478708962
     },
     {
-      "id": 1782207018379,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782207018380
+      "id": 1782478721365.228,
+      "type": "position_close",
+      "message": "SELL BTCUSDT @ $59294.63 | PnL: $-0.00",
+      "timestamp": 1782478721156
     },
     {
-      "id": 1782207004045,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782207004045
+      "id": 1782478736220.011,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478736160
     },
     {
-      "id": 1782206988271,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782206988271
+      "id": 1782478736859.2764,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478736160
     },
     {
-      "id": 1782206973987,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782206973987
+      "id": 1782478750366.2024,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 47, trend bearish",
+      "timestamp": 1782478749741
     },
     {
-      "id": 1782206957806,
-      "type": "BNB too low: 0.0007",
-      "timestamp": 1782206957806
+      "id": 1782478759062.5806,
+      "type": "signal_buy",
+      "message": "BUY BTCUSDT @ $59250.25",
+      "timestamp": 1782478758980
     },
     {
-      "id": 1782206951309,
-      "type": "Portfolio: $0.39",
-      "timestamp": 1782206951309
+      "id": 1782478774364.8884,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478773983
+    },
+    {
+      "id": 1782478776279.5256,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478775935
+    },
+    {
+      "id": 1782478779049.5693,
+      "type": "agent_log",
+      "message": "Qwen: SELL (66%) - Trend/MACD turning down - protect the position",
+      "timestamp": 1782478778292
+    },
+    {
+      "id": 1782478787058.2651,
+      "type": "position_close",
+      "message": "SELL BTCUSDT @ $59211.01 | PnL: $-0.00",
+      "timestamp": 1782478786065
+    },
+    {
+      "id": 1782478801908.5732,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478801078
+    },
+    {
+      "id": 1782478802003.4436,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478801078
+    },
+    {
+      "id": 1782478804505.9353,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 45, trend bearish",
+      "timestamp": 1782478803540
+    },
+    {
+      "id": 1782478804307.3494,
+      "type": "trade_blocked",
+      "message": "BLOCKED - Cooldown 3s",
+      "timestamp": 1782478803540
+    },
+    {
+      "id": 1782478819470.6758,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478818548
+    },
+    {
+      "id": 1782478818908.4236,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478818548
+    },
+    {
+      "id": 1782478828174.392,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 42, trend bearish",
+      "timestamp": 1782478827823
+    },
+    {
+      "id": 1782478834584.0251,
+      "type": "signal_buy",
+      "message": "BUY BTCUSDT @ $59161.02",
+      "timestamp": 1782478834176
+    },
+    {
+      "id": 1782478849914.2527,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478849180
+    },
+    {
+      "id": 1782478851778.708,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478851521
+    },
+    {
+      "id": 1782478854317.0796,
+      "type": "agent_log",
+      "message": "Qwen: SELL (66%) - Trend/MACD turning down - protect the position",
+      "timestamp": 1782478853569
+    },
+    {
+      "id": 1782478860549.4128,
+      "type": "position_close",
+      "message": "SELL BTCUSDT @ $59217.07 | PnL: $-0.00",
+      "timestamp": 1782478860183
+    },
+    {
+      "id": 1782478875209.18,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478875191
+    },
+    {
+      "id": 1782478876024.2266,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478875191
+    },
+    {
+      "id": 1782478883819.481,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 42, trend bearish",
+      "timestamp": 1782478883510
+    },
+    {
+      "id": 1782478906069.9602,
+      "type": "signal_buy",
+      "message": "BUY BTCUSDT @ $59215.16",
+      "timestamp": 1782478905073
+    },
+    {
+      "id": 1782478920952.9084,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478920075
+    },
+    {
+      "id": 1782478923533.0825,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478922848
+    },
+    {
+      "id": 1782478926014.7307,
+      "type": "agent_log",
+      "message": "Qwen: SELL (66%) - Trend/MACD turning down - protect the position",
+      "timestamp": 1782478925136
+    },
+    {
+      "id": 1782478937393.083,
+      "type": "position_close",
+      "message": "SELL BTCUSDT @ $59221 | PnL: $-0.00",
+      "timestamp": 1782478937281
+    },
+    {
+      "id": 1782478952805.6921,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478952291
+    },
+    {
+      "id": 1782478953246.9502,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782478952291
+    },
+    {
+      "id": 1782478964215.2698,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 43, trend bearish",
+      "timestamp": 1782478964101
+    },
+    {
+      "id": 1782478984820.0635,
+      "type": "signal_buy",
+      "message": "BUY BTCUSDT @ $59199.23",
+      "timestamp": 1782478984699
+    },
+    {
+      "id": 1782478999748.991,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782478999708
+    },
+    {
+      "id": 1782479002902.946,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782479002756
+    },
+    {
+      "id": 1782479010376.199,
+      "type": "agent_log",
+      "message": "Qwen: SELL (66%) - Trend/MACD turning down - protect the position",
+      "timestamp": 1782479010351
+    },
+    {
+      "id": 1782479017021.2302,
+      "type": "position_close",
+      "message": "SELL BTCUSDT @ $59240 | PnL: $-0.00",
+      "timestamp": 1782479016485
+    },
+    {
+      "id": 1782479032409.9927,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782479031493
+    },
+    {
+      "id": 1782479031918.1814,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782479031493
+    },
+    {
+      "id": 1782479041319.5386,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 44, trend bearish",
+      "timestamp": 1782479040462
+    },
+    {
+      "id": 1782479041020.1,
+      "type": "trade_blocked",
+      "message": "BLOCKED - Daily trade limit reached",
+      "timestamp": 1782479040462
+    },
+    {
+      "id": 1782479055864.9927,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782479055476
+    },
+    {
+      "id": 1782479055844.532,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782479055476
+    },
+    {
+      "id": 1782479060349.6335,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 43, trend bearish",
+      "timestamp": 1782479060255
+    },
+    {
+      "id": 1782479060267.5684,
+      "type": "trade_blocked",
+      "message": "BLOCKED - Daily trade limit reached",
+      "timestamp": 1782479060255
+    },
+    {
+      "id": 1782479075735.3718,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782479075271
+    },
+    {
+      "id": 1782479075527.9482,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782479075271
+    },
+    {
+      "id": 1782479080056.0525,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 43, trend bearish",
+      "timestamp": 1782479079679
+    },
+    {
+      "id": 1782479080628.7878,
+      "type": "trade_blocked",
+      "message": "BLOCKED - Daily trade limit reached",
+      "timestamp": 1782479079679
+    },
+    {
+      "id": 1782479095188.286,
+      "type": "system",
+      "message": "Trading cycle started",
+      "timestamp": 1782479094682
+    },
+    {
+      "id": 1782479095278.0305,
+      "type": "system",
+      "message": "Requesting Qwen analysis...",
+      "timestamp": 1782479094682
+    },
+    {
+      "id": 1782479098291.4202,
+      "type": "agent_log",
+      "message": "Qwen: BUY (68%) - Deploying idle capital (spot accumulation); RSI 42, trend bearish",
+      "timestamp": 1782479097410
+    },
+    {
+      "id": 1782479098117.7944,
+      "type": "trade_blocked",
+      "message": "BLOCKED - Daily trade limit reached",
+      "timestamp": 1782479097410
     }
-  ]
+  ],
+  "timestamp": "2026-06-26T13:04:57.410Z"
 }

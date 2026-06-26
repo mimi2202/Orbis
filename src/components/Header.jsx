@@ -89,7 +89,7 @@ export default function Header({ isMobile = false }) {
             gap: isMobile ? '6px' : '12px',
             flexWrap: 'wrap'
           }}>
-            <span>Syntra</span>
+            <span>Orbis</span>
             <span style={{
               fontSize: isMobile ? '9px' : '12px',
               fontWeight: 500,

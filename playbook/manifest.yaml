@@ -1,0 +1,86 @@
+name: syntra-v2-strategy
+display_name: Syntra V2 Strategy
+version: 1.0.0
+description: Adaptive market regime strategy using SMA crossover and RSI
+long_description: |
+  Syntra V2 is an adaptive trading strategy designed for BTCUSDT perpetual futures.
+  Its core thesis captures the idea that market conditions alternate between trending
+  and ranging phases, and a successful strategy must adapt its approach accordingly.
+  The strategy's objective is to automatically detect the current market regime and
+  apply the most appropriate trading method. In trending markets, it follows the
+  trend using moving-average crossover signals. In ranging markets with low
+  volatility, it employs mean reversion using a momentum oscillator at extremes.
+  When the market regime is unclear, the strategy aims to stay flat to avoid false
+  signals.
+
+  Entry decisions are made by first classifying the current market regime using
+  the relationship between a short-term and long-term moving average. When the
+  short-term average rises above the long-term average, the strategy opens a long
+  position to follow the upward trend. When the short-term average falls below the
+  long-term average, it opens a short position to follow the downward trend. In
+  ranging, low-volatility conditions, the strategy enters long when the momentum
+  oscillator signals oversold levels, and enters short when it signals overbought
+  levels. All entries require a minimum confidence threshold to filter out weak
+  signals.
+
+  Exit logic is governed by clear risk management rules. Positions close when
+  take profit targets are reached or stop loss levels are hit. The strategy also
+  monitors for market regime changes and may exit early if conditions shift,
+  limiting exposure in rapidly changing environments.
+
+  Subscribers can adjust several key parameters to tune the strategy's behavior.
+  The margin budget controls the maximum capital allocated to this Playbook and
+  serves as the denominator for return percentage calculations — raising it
+  increases the notional size of each trade. The confidence threshold filters
+  entry signals; raising it produces fewer but higher-conviction trades while
+  lowering it increases signal frequency. The volatility lookback period adjusts
+  how the strategy distinguishes trending from ranging regimes; a longer period
+  smooths out short-term noise while a shorter period makes it more reactive.
+
+  Important risks include potential losses during rapid regime changes where the
+  strategy may not react quickly enough. The strategy may underperform in highly
+  volatile or choppy markets where whipsaws cause frequent false signals. It is
+  unsuitable for use during major news events or black swan conditions where
+  technical indicators fail to reflect true market dynamics. Maximum drawdown is
+  not guaranteed to stay within any specific range, and users should be aware that
+  past backtest performance does not guarantee future results. Subscribers should
+  match this Playbook against their own risk tolerance before enabling follow-trade.
+market_type: contract
+trading_symbols:
+  - BTCUSDT
+tags:
+  - trend
+  - mean-reversion
+  - btc
+  - contract
+schedule:
+  cron: "0 */4 * * *"
+  tz: "Asia/Shanghai"
+decision_mode: deterministic
+backtest_support: full
+runtime_profile: deterministic
+execution_mode: signal_only
+follow_trade_supported: true
+
+strategy_config:
+  trading_symbols:
+    - BTCUSDT
+  sma_fast: 20
+  sma_slow: 50
+  rsi_period: 14
+  volatility_period: 20
+  confidence_threshold: 0.60
+  margin_budget: "50"
+
+user_config_schema:
+  margin_budget:
+    type: string
+    default: "50"
+    pattern: "^[0-9]+(\\.[0-9]+)?$"
+    label: "Margin budget USDT"
+  confidence_threshold:
+    type: number
+    default: 0.60
+    min: 0.50
+    max: 0.95
+    label: "Minimum signal confidence"
