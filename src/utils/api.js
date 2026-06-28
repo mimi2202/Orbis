@@ -4,8 +4,8 @@
 
 export const API_URL = isLocalhost
   ? 'http://localhost:5000'
-  : import.meta.env.VITE_API_URL || 'https://syntra-ubkl.onrender.com'
+  : import.meta.env.VITE_API_URL || 'https://orbis-467q.onrender.com'
 
 export const WS_URL = isLocalhost
   ? 'ws://localhost:5000'
-  : 'wss://syntra-ubkl.onrender.com'
+  : 'wss://orbis-467q.onrender.com'
