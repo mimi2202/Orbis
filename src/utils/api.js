@@ -8,4 +8,8 @@ export const API_URL = isLocalhost
 
 export const WS_URL = isLocalhost
   ? 'ws://localhost:5000'
+<<<<<<< HEAD
   : 'wss://orbis-467q.onrender.com'
+=======
+  : 'https://orbis-467q.onrender.com'
+>>>>>>> 83cbaf0c968f62ce33046d4bbc36b4b67f16be8b
