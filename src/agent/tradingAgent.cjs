@@ -28,6 +28,10 @@ class TradingAgent {
       minSecondsBetweenTrades: parseInt(process.env.MIN_SECONDS_BETWEEN_TRADES || 60),
     });
 
+    // Bitget spot minimum is ~1 USDT notional. Anything below this is dust the
+    // exchange will reject (error 45110), so we never treat it as a position.
+    this.MIN_NOTIONAL_USDT = 1.5;
+
     this.isRunning = false;
     this.cycleInterval = 15000;
     this.symbol = 'BTCUSDT';
@@ -71,29 +75,36 @@ class TradingAgent {
 
     this.executor.loadTradeHistory();
 
-    // REAL balance from the account — source of truth, not a hardcoded number.
+    // REAL balance from the account - source of truth, not a hardcoded number.
     const startBal = await this.executor.syncBalance();
-    // If the account already holds BTC, reconstruct a position so the agent can sell it.
-try {
-  const btc = await this.api.getBalance('BTC');
-  if (btc.available > 0.000001) {
-    const px = await this.api.getPrice(this.symbol);
-    this.executor.position = {
-      symbol: this.symbol,
-      entryPrice: px,
-      quantity: btc.available,
-      timestamp: new Date().toISOString(),
-      orderId: 'preexisting',
-      stopLoss: px * (1 - this.executor.config.stopLossPercent / 100),
-      takeProfit: px * (1 + this.executor.config.takeProfitPercent / 100),
-    };
-    console.log('Detected existing BTC position:', btc.available);
-  }
-} catch (e) { /* no BTC, fine */ }
+
+    // If the account already holds a MEANINGFUL amount of BTC, reconstruct a
+    // position so the agent can sell it. Sub-$1.50 BTC is dust the exchange
+    // won't accept a sell for (45110), so we ignore it instead of looping.
+    try {
+      const btc = await this.api.getBalance('BTC');
+      const px = await this.api.getPrice(this.symbol);
+      const btcValue = btc.available * px;
+      if (btcValue >= this.MIN_NOTIONAL_USDT) {
+        this.executor.position = {
+          symbol: this.symbol,
+          entryPrice: px,
+          quantity: btc.available,
+          timestamp: new Date().toISOString(),
+          orderId: 'preexisting',
+          stopLoss: px * (1 - this.executor.config.stopLossPercent / 100),
+          takeProfit: px * (1 + this.executor.config.takeProfitPercent / 100),
+        };
+        console.log('Detected existing BTC position:', btc.available, '(~$' + btcValue.toFixed(2) + ')');
+      } else if (btc.available > 0) {
+        console.log('Ignoring BTC dust:', btc.available, '(~$' + btcValue.toFixed(2) + ', below $' + this.MIN_NOTIONAL_USDT + ' min)');
+      }
+    } catch (e) { /* no BTC, fine */ }
+
     console.log('Real starting USDT balance: $' + (startBal ? startBal.toFixed(2) : '0.00'));
     if (!startBal || startBal <= 0) {
-      console.log('WARNING: account USDT balance is 0 — buys will fail until funded.');
-      this.addLog('system', 'Account USDT balance is 0 — fund the account before live trades.');
+      console.log('WARNING: account USDT balance is 0 - buys will fail until funded.');
+      this.addLog('system', 'Account USDT balance is 0 - fund the account before live trades.');
     }
 
     this.isRunning = true;
@@ -150,7 +161,7 @@ try {
     console.log('Requesting Qwen analysis...');
     this.addLog('system', 'Requesting Qwen analysis...');
 
-  const decision = await this.analyst.analyze(this.symbol, !!this.executor.position);
+    const decision = await this.analyst.analyze(this.symbol, !!this.executor.position);
 
     console.log('Qwen Decision: ' + decision.decision + ' (' + decision.confidence + '% confidence)');
     console.log('Reasoning: ' + decision.reasoning);
