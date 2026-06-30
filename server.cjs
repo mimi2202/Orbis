@@ -1,4 +1,4 @@
-﻿// server.cjs - SPOT / Bitget AI Trading Agent
+﻿// server.cjs - SPOT / Orbis Bitget AI Trading Agent (in-process, memory-friendly)
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -6,17 +6,19 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
 const WebSocket = require('ws');
-const { spawn } = require('child_process');
 
 dotenv.config();
 
 const app = express();
 
+// NOTE: origins must NOT have a trailing slash or path - just scheme://host.
 app.use(cors({
   origin: [
     'https://orbis-blue.vercel.app',
+    'https://orbis-467q.onrender.com',
     'http://localhost:3000',
-    'http://localhost:5173'
+    'http://localhost:5173',
+    'http://127.0.0.1:5173'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -41,9 +43,8 @@ function broadcast(data) {
 const PORT = process.env.PORT || 5000;
 const STATE_FILE = path.join(__dirname, 'agent-state.json');
 const SETTINGS_FILE = path.join(__dirname, 'agent-settings.json');
-const AGENT_SCRIPT = path.join(__dirname, 'src', 'agent', 'tradingAgent.cjs');
 
-// Single shared Bitget client for read-only dashboard calls (real balance).
+// Shared Bitget client for read-only dashboard calls (real balance).
 const BitgetApi = require('./src/services/bitgetApi.cjs');
 const bitget = new BitgetApi(
   process.env.BITGET_API_KEY,
@@ -51,61 +52,39 @@ const bitget = new BitgetApi(
   process.env.BITGET_PASSPHRASE
 );
 
-// Agent Process Management
-let agentProcess = null;
+// ============================================
+// IN-PROCESS AGENT (no spawned child = less memory, live state)
+// ============================================
+const TradingAgent = require('./src/agent/tradingAgent.cjs');
+
+let agent = null;
 let agentRunning = false;
 
 function startAgent() {
-  if (agentProcess) {
+  if (agent && agentRunning) {
     console.log('[SERVER] Agent already running');
     return;
   }
-
-  console.log('[SERVER] Starting Bitget Trading Agent...');
-
-  agentProcess = spawn('node', [AGENT_SCRIPT], {
-    cwd: __dirname,
-    env: { ...process.env },
-    stdio: ['pipe', 'pipe', 'pipe']
-  });
-
-  agentProcess.stdout.on('data', (data) => {
-    const msg = data.toString().trim();
-    console.log('[AGENT] ' + msg);
-    broadcast({ id: Date.now(), type: 'agent_log', message: msg, timestamp: Date.now() });
-  });
-
-  agentProcess.stderr.on('data', (data) => {
-    const msg = data.toString().trim();
-    console.log('[AGENT ERR] ' + msg);
-    broadcast({ id: Date.now(), type: 'agent_error', message: msg, timestamp: Date.now() });
-  });
-
-  agentProcess.on('close', (code) => {
-    console.log('[SERVER] Agent exited with code ' + code);
-    agentProcess = null;
-    agentRunning = false;
-    broadcast({ id: Date.now(), type: 'system', message: 'Agent stopped', timestamp: Date.now() });
-  });
-
+  console.log('[SERVER] Starting Orbis Trading Agent (in-process)...');
+  if (!agent) agent = new TradingAgent();
+  agent.start(); // runs the trading loop in THIS process
   agentRunning = true;
-  broadcast({ id: Date.now(), type: 'system', message: 'Bitget Agent started', timestamp: Date.now() });
+  broadcast({ id: Date.now(), type: 'system', message: 'Orbis Agent started', timestamp: Date.now() });
 }
 
 function stopAgent() {
-  if (!agentProcess) return;
-  console.log('[SERVER] Stopping Bitget Trading Agent...');
-  agentProcess.kill('SIGTERM');
-  setTimeout(() => {
-    if (agentProcess) {
-      agentProcess.kill('SIGKILL');
-      agentProcess = null;
-      agentRunning = false;
-    }
-  }, 2000);
+  if (!agent) return;
+  console.log('[SERVER] Stopping agent...');
+  try { agent.stop(); } catch (e) { console.error('stop error:', e.message); }
+  agentRunning = false;
+  broadcast({ id: Date.now(), type: 'system', message: 'Agent stopped', timestamp: Date.now() });
 }
 
+// Read live state straight from the in-memory agent (falls back to disk).
 function readAgentState() {
+  if (agent) {
+    try { return agent.getStatus(); } catch (e) {}
+  }
   try {
     if (fs.existsSync(STATE_FILE)) {
       return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
@@ -118,17 +97,15 @@ function readAgentState() {
 // API ENDPOINTS
 // ============================================
 
-// Health Check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
     uptime: process.uptime(),
     agent: agentRunning ? 'running' : 'stopped',
-    version: 'V2 - Bitget AI (SPOT)'
+    version: 'V2 - Orbis (SPOT, in-process)'
   });
 });
 
-// Status
 app.get('/api/status', (req, res) => {
   const state = readAgentState();
   const defaultStats = { totalTrades: 0, wins: 0, losses: 0, pnl: 0, winRate: 0, balance: 0 };
@@ -142,20 +119,18 @@ app.get('/api/status', (req, res) => {
     stats: state?.stats || defaultStats,
     trades: state?.trades || [],
     position: state?.position || null,
-    logs: state?.logs || [],
-    _logs: state?.logs || [],
+    logs: state?.logs || state?._logs || [],
+    _logs: state?._logs || state?.logs || [],
     lastUpdate: state?.timestamp || state?.lastUpdate || null,
     version: 'V2',
     agent: {
-      type: 'Bitget AI Agent',
+      type: 'Orbis Bitget AI Agent',
       qwenEnabled: !!process.env.BITGET_QWEN_API_KEY,
       mode: 'SPOT'
     }
   });
 });
 
-// Agent Wallet — REAL balance from Bitget (v3 unified account).
-// (The old hardcoded $10,000 mock handler has been removed so this one wins.)
 app.get('/api/agent-wallet', async (req, res) => {
   try {
     const balance = await bitget.getBalance('USDT');
@@ -171,22 +146,15 @@ app.get('/api/agent-wallet', async (req, res) => {
     });
   } catch (error) {
     console.error('Failed to get wallet balance:', error.message);
-    res.json({
-      success: false,
-      error: error.message,
-      balance: 0,
-      usdValue: 0
-    });
+    res.json({ success: false, error: error.message, balance: 0, usdValue: 0 });
   }
 });
 
-// Strategy
 app.get('/api/strategy', (req, res) => {
   try {
     const strategyPath = path.join(__dirname, 'strategies', 'default.strategy.md');
     if (fs.existsSync(strategyPath)) {
-      const content = fs.readFileSync(strategyPath, 'utf8');
-      res.json({ success: true, content });
+      res.json({ success: true, content: fs.readFileSync(strategyPath, 'utf8') });
     } else {
       res.json({ success: false, error: 'Strategy file not found' });
     }
@@ -195,7 +163,6 @@ app.get('/api/strategy', (req, res) => {
   }
 });
 
-// Settings
 app.get('/api/settings', (req, res) => {
   let settings = {
     maxTradeAmount: 0.001,
@@ -223,7 +190,6 @@ app.post('/api/settings', (req, res) => {
   }
 });
 
-// Agent Signals
 app.get('/api/agent-signals', (req, res) => {
   const state = readAgentState();
   res.json({
@@ -255,16 +221,14 @@ app.get('/api/agent-signals', (req, res) => {
   });
 });
 
-// Start Auto Trade
 app.post('/api/start-auto-trade', (req, res) => {
   if (agentRunning) {
     return res.json({ success: false, message: 'Agent already running', running: true });
   }
   startAgent();
-  res.json({ success: true, message: 'Bitget AI Agent starting', running: true, version: 'V2' });
+  res.json({ success: true, message: 'Orbis AI Agent starting', running: true, version: 'V2' });
 });
 
-// Stop Auto Trade
 app.post('/api/stop-auto-trade', (req, res) => {
   if (!agentRunning) {
     return res.json({ success: false, message: 'Agent not running', running: false });
@@ -273,7 +237,6 @@ app.post('/api/stop-auto-trade', (req, res) => {
   res.json({ success: true, message: 'Agent stopped', running: false });
 });
 
-// TWAK Sign (compatibility)
 app.post('/api/twak/sign', (req, res) => {
   broadcast({ id: Date.now(), type: 'twak_sign', message: 'Intent signed', data: req.body, timestamp: Date.now() });
   res.json({ success: true, version: 'V2' });
@@ -284,7 +247,7 @@ app.post('/api/twak/sign', (req, res) => {
 // ============================================
 server.listen(PORT, () => {
   console.log('========================================');
-  console.log('  ORBIS - Bitget AI Trading Agent (SPOT)');
+  console.log('  ORBIS - Bitget AI Trading Agent (SPOT, in-process)');
   console.log('  Port: ' + PORT);
   console.log('  Qwen: ' + (process.env.BITGET_QWEN_API_KEY ? 'ENABLED' : 'DISABLED'));
   console.log('  Agent auto-start in 5 seconds...');
@@ -296,6 +259,5 @@ server.listen(PORT, () => {
   }, 5000);
 });
 
-// Graceful Shutdown
 process.on('SIGINT', () => { console.log('\n[SERVER] Shutting down...'); stopAgent(); process.exit(0); });
 process.on('SIGTERM', () => { console.log('\n[SERVER] Shutting down...'); stopAgent(); process.exit(0); });
