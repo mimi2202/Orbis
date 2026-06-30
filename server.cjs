@@ -12,8 +12,7 @@ dotenv.config();
 const app = express();
 
 // NOTE: origins must NOT have a trailing slash or path - just scheme://host.
-app.use(cors());            // allow all origins
-app.options('*', cors());   // handle preflight for all routes
+app.use(cors());
 app.use(bodyParser.json());
 
 const server = require('http').createServer(app);
