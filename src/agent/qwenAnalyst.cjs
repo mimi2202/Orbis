@@ -5,7 +5,7 @@ class QwenAnalyst {
   constructor(apiKey, skillHub) {
     this.apiKey = apiKey;
     this.skillHub = skillHub;
-    this.baseUrl = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+    this.baseUrl = process.env.QWEN_BASE_URL || 'https://ws-c1x4m7ykqu7vqdiv.eu-central-1.maas.aliyuncs.com/api/v1';
     this.model = 'qwen3.6-plus';
     this.useMock = !apiKey || apiKey === 'mock_qwen_key' || apiKey === 'your_qwen_api_key_here' || apiKey === 'mock';
     this.OVERBOUGHT = 70; // only thing that blocks a flat entry
