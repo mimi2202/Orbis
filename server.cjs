@@ -14,8 +14,7 @@ const app = express();
 
 app.use(cors({
   origin: [
-    'https://orbis-blue.vercel.app/',
-    'https://orbis-blue.vercel.app',  
+    'https://orbis-blue.vercel.app',
     'http://localhost:3000',
     'http://localhost:5173'
   ],
