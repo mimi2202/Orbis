@@ -12,18 +12,8 @@ dotenv.config();
 const app = express();
 
 // NOTE: origins must NOT have a trailing slash or path - just scheme://host.
-app.use(cors({
-  origin: [
-    'https://orbis-blue.vercel.app',
-    'https://orbis-467q.onrender.com',
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://127.0.0.1:5173'
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors());            // allow all origins
+app.options('*', cors());   // handle preflight for all routes
 app.use(bodyParser.json());
 
 const server = require('http').createServer(app);
